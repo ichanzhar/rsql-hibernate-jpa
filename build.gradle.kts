@@ -45,7 +45,7 @@ publishing {
                 licenses {
                     license {
                         name.set("MIT License")
-                        url.set("http://opensource.org/licenses/MIT")
+                        url.set("http://www.opensource.org/licenses/mit-license.php")
                     }
                 }
                 developers {
@@ -53,11 +53,13 @@ publishing {
                         id.set("ichanzhar")
                         name.set("Ihor Chanzhar")
                         email.set("ihor.chanzhar@gmail.com")
+                        organization.set("com.github.ichanzhar")
+                        organizationUrl.set("https://github.com/ichanzhar")
                     }
                 }
                 scm {
-                    connection.set("scm:git:git@github.com:ichanzhar/rsql-hibernate-jpa.git")
-                    developerConnection.set("scm:git:ssh://github.com/ichanzhar/rsql-hibernate-jpa.git")
+                    connection.set("scm:git:git://github.com/ichanzhar/rsql-hibernate-jpa.git")
+                    developerConnection.set("scm:git:git@github.com:ichanzhar/rsql-hibernate-jpa.git")
                     url.set("https://github.com/ichanzhar/rsql-hibernate-jpa")
                 }
             }
