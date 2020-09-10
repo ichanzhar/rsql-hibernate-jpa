@@ -40,7 +40,7 @@ publishing {
             artifact(sourcesJar.get())
             pom {
                 name.set("RSQL Hibernate JPA")
-                description.set("")
+                description.set("RSQL implementation for Hibernate/Spring data with join tables support")
                 url.set("https://github.com/ichanzhar/rsql-hibernate-jpa")
                 licenses {
                     license {
@@ -50,7 +50,7 @@ publishing {
                 }
                 developers {
                     developer {
-                        id.set("i_chanzhar")
+                        id.set("ichanzhar")
                         name.set("Ihor Chanzhar")
                         email.set("ihor.chanzhar@gmail.com")
                     }
