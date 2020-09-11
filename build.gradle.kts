@@ -10,7 +10,6 @@ group = "com.github.ichanzhar"
 version = "0.1"
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
@@ -24,12 +23,20 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
 }
 
+java {
+    withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions{
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "1.8"
+    }
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
-    getArchiveClassifier().set("sources")
+    archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
 }
 
