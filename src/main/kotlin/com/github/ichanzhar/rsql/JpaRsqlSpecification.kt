@@ -1,13 +1,14 @@
 package com.github.ichanzhar.rsql
 
-import com.github.ichanzhar.rsql.exception.InvalidDateFormatException
 import com.github.ichanzhar.rsql.operations.Params
 import com.github.ichanzhar.rsql.operations.ProcessorsFactory.Companion.getProcessor
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
-import org.joda.time.format.ISODateTimeFormat
 import org.springframework.data.jpa.domain.Specification
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.stream.Collectors
 import javax.persistence.criteria.*
 
 class JpaRsqlSpecification<T>(
@@ -45,39 +46,38 @@ class JpaRsqlSpecification<T>(
 
 	private fun getPath(root: Root<T>, tokenizer: StringTokenizer, token: String): Path<T> {
 		var joinToken: String? = token
-		var join: Join<*, *> = root.join<Any, Any>(joinToken)
+		var join: Join<*, T> = root.join<Any, T>(joinToken)
 		while (tokenizer.countTokens() >= 2) {
 			joinToken = tokenizer.nextToken()
 			join = join.join<Any, T>(joinToken)
 		}
-		return join as Path<T>
+		return join
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		val args: MutableList<Any> = ArrayList()
-		javaType = root.get<Any>(property).javaType
-		for (argument in arguments) {
-			if (javaType == Int::class.java) {
-				args.add(argument.toInt())
-			} else if (javaType == Long::class.java) {
-				args.add(argument.toLong())
-			} else if (javaType == Boolean::class.java) {
-				args.add(java.lang.Boolean.valueOf(argument))
-			} else if (isDate()) {
-				try {
-					val dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(argument)
-					args.add(dateTime.toDate())
-				} catch (e: IllegalArgumentException) {
-					throw InvalidDateFormatException(argument, property)
-				}
-			} else {
-				args.add(argument)
-			}
-		}
-		return args
-	}
+		val type = root.get<Any>(property).javaType
 
-	private fun isDate(): Boolean {
-		return Date::class.java.isAssignableFrom(javaType)
+		return arguments.stream().map<Any> { arg: String ->
+			when (type) {
+				Int::class.java -> {
+					return@map arg.toInt()
+				}
+				Long::class.java -> {
+					return@map arg.toLong()
+				}
+				UUID::class.java -> {
+					return@map UUID.fromString(arg)
+				}
+				Boolean::class.java -> {
+					return@map arg.toBoolean()
+				}
+				Timestamp::class.java -> {
+					return@map SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(arg)
+				}
+				else -> {
+					return@map arg
+				}
+			}
+		}.collect(Collectors.toList())
 	}
 }
