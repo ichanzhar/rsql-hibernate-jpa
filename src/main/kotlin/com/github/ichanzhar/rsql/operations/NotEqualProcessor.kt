@@ -12,38 +12,27 @@ class NotEqualProcessor(params: Params) : AbstractProcessor(params) {
         if (isRootJoin()) {
             return if (isLikeExpression()) {
                 params.builder.notLike(
-                    (params.root as RootImpl).join<Any, Any>(params.property)  as Expression<String>,
-                    params.argument.toString().replace('*', '%')
+                    (params.root as RootImpl).join<Any, String>(params.property)  as Expression<String>,
+                    getFormattedLikePattern()
                 )
-            } else params.builder.notEqual(
-                (params.root as RootImpl).join<Any, Any>(params.property),
-                params.argument
-            )
+            } else params.builder.notEqual((params.root as RootImpl).join<Any, Any>(params.property), params.argument)
         } else if (isSingularJoin()) {
             return if (isLikeExpression()) {
                 params.builder.notLike(
-                    (params.root as SingularAttributeJoin<*, *>).join<Any, Any>(params.property) as Expression<String>,
-                    params.argument.toString().replace('*', '%')
+                    (params.root as SingularAttributeJoin<*, *>).join<Any, String>(params.property) as Expression<String>,
+                    getFormattedLikePattern()
                 )
             } else params.builder.notEqual(
-                (params.root as SingularAttributeJoin<*, *>).join<Any, Any>(params.property),
-                params.argument
-            )
+                (params.root as SingularAttributeJoin<*, *>).join<Any, Any>(params.property), params.argument)
         } else if (isSetJoin()) {
             return if (isLikeExpression()) {
                 params.builder.notLike(
-                    (params.root as SetAttributeJoin<*, *>).join<Any, Any>(params.property) as Expression<String>,
-                    params.argument.toString().replace('*', '%')
+                    (params.root as SetAttributeJoin<*, *>).join<Any, String>(params.property) as Expression<String>,
+                    getFormattedLikePattern()
                 )
-            } else params.builder.notEqual(
-                (params.root as SetAttributeJoin<*, *>).join<Any, Any>(params.property),
-                params.argument
-            )
+            } else params.builder.notEqual((params.root as SetAttributeJoin<*, *>).join<Any, Any>(params.property), params.argument)
         } else if (isLikeExpression()) {
-            return params.builder.notLike(
-                params.root.get(params.property),
-                params.argument.toString().replace('*', '%')
-            )
+            return params.builder.notLike(params.root.get(params.property), getFormattedLikePattern())
         } else if (params.argument == null) {
             return params.builder.isNull(params.root.get<Any>(params.property))
         } else {

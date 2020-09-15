@@ -12,9 +12,9 @@ import java.util.stream.Collectors
 import javax.persistence.criteria.*
 
 class JpaRsqlSpecification<T>(
-        private val globalProperty: String,
-        private val operator: ComparisonOperator,
-        private val arguments: List<String>
+	private val globalProperty: String,
+	private val operator: ComparisonOperator,
+	private val arguments: List<String>
 ) : Specification<T> {
 	private var javaType: Class<out Any>? = null
 	override fun toPredicate(root: Root<T>, query: CriteriaQuery<*>, builder: CriteriaBuilder): Predicate {

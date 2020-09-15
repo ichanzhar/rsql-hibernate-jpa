@@ -11,8 +11,8 @@ class EqualProcessor(params: Params) : AbstractProcessor(params) {
         if (isRootJoin()) {
             return if (isLikeExpression()) {
                 params.builder.like(
-                    (params.root as RootImpl).join<Any, Any>(params.property)  as Expression<String>,
-                    params.argument.toString().replace('*', '%')
+                    (params.root as RootImpl).join<Any, String>(params.property)  as Expression<String>,
+                    getFormattedLikePattern()
                 )
             } else params.builder.equal(
                 (params.root as RootImpl).join<Any, Any>(params.property),
@@ -21,8 +21,8 @@ class EqualProcessor(params: Params) : AbstractProcessor(params) {
         } else if (isSingularJoin()) {
             return if (isLikeExpression()) {
                 params.builder.like(
-                    (params.root as SingularAttributeJoin<*, *>).join<Any, Any>(params.property) as Expression<String>,
-                    params.argument.toString().replace('*', '%')
+                    (params.root as SingularAttributeJoin<*, *>).join<Any, String>(params.property) as Expression<String>,
+                    getFormattedLikePattern()
                 )
             } else params.builder.equal(
                 (params.root as SingularAttributeJoin<*, *>).join<Any, Any>(params.property),
@@ -31,8 +31,8 @@ class EqualProcessor(params: Params) : AbstractProcessor(params) {
         } else if (isSetJoin()) {
             return if (isLikeExpression()) {
                 params.builder.like(
-                    (params.root as SetAttributeJoin<*, *>).join<Any, Any>(params.property) as Expression<String>,
-                    params.argument.toString().replace('*', '%')
+                    (params.root as SetAttributeJoin<*, *>).join<Any, String>(params.property) as Expression<String>,
+                    getFormattedLikePattern()
                 )
             } else params.builder.equal(
                 (params.root as SetAttributeJoin<*, *>).join<Any, Any>(params.property),
@@ -41,7 +41,7 @@ class EqualProcessor(params: Params) : AbstractProcessor(params) {
         } else if (isLikeExpression()) {
             return params.builder.like(
                 params.root.get(params.property),
-                params.argument.toString().replace('*', '%')
+                getFormattedLikePattern()
             )
         } else if (params.argument == null) {
             return params.builder.isNull(params.root.get<Any>(params.property))
