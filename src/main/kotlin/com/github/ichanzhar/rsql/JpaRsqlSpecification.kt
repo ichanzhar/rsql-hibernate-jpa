@@ -32,7 +32,7 @@ class JpaRsqlSpecification<T>(
 
 	private fun toPredicate(root: Path<T>, builder: CriteriaBuilder?, property: String?): Predicate {
 		val args = castArguments(root, property)
-		val params = Params(root, builder!!, property!!, globalProperty, args, args[0], javaType!!)
+		val params = Params(root, builder!!, property!!, globalProperty, args, args[0], javaType)
 		return getProcessor(operator, params).process()
 	}
 
@@ -55,10 +55,10 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		val type = root.get<Any>(property).javaType
+		this.javaType = root.get<Any>(property).javaType
 
 		return arguments.stream().map<Any> { arg: String ->
-			when (type) {
+			when (javaType) {
 				Int::class.java -> {
 					return@map arg.toInt()
 				}

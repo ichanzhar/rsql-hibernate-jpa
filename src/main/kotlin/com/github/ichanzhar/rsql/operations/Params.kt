@@ -11,5 +11,5 @@ data class Params(
     var globalProperty: String,
     var args: List<Any>,
     var argument: Any?,
-    var javaType: Class<out Any>
+    var javaType: Class<out Any>?
 )
