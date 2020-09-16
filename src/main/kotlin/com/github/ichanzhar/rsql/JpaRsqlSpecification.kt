@@ -37,7 +37,7 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun isAssociation(root: Root<T>, propertyName: String): Boolean {
-		return root.model.getAttribute(propertyName).isAssociation
+		return root.model.getAttribute(propertyName).isAssociation || root.model.getAttribute(propertyName).persistentAttributeType.name == "EMBEDDED"
 	}
 
 	private fun containsJoins(property: String): Boolean {
