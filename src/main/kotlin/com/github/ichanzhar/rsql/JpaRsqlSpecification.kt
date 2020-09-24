@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification
 import java.sql.Timestamp
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.*
 import java.util.*
 import java.util.stream.Collectors
 import javax.persistence.criteria.*
@@ -79,6 +80,21 @@ class JpaRsqlSpecification<T>(
 					} catch (e: ParseException) {
 						throw InvalidDateFormatException(arg, property)
 					}
+				}
+				LocalDate::class.java -> {
+					return@map LocalDate.parse(arg)
+				}
+				LocalDateTime::class.java -> {
+					return@map LocalDateTime.parse(arg)
+				}
+				LocalTime::class.java -> {
+					return@map LocalTime.parse(arg)
+				}
+				OffsetDateTime::class.java -> {
+					return@map OffsetDateTime.parse(arg)
+				}
+				ZonedDateTime::class.java -> {
+					return@map ZonedDateTime.parse(arg)
 				}
 				else -> {
 					if(javaType?.isEnum == true) {
