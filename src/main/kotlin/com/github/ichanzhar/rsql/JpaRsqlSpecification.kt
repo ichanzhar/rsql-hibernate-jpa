@@ -1,11 +1,14 @@
 package com.github.ichanzhar.rsql
 
+import com.github.ichanzhar.rsql.exception.InvalidDateFormatException
+import com.github.ichanzhar.rsql.exception.InvalidEnumValueException
 import com.github.ichanzhar.rsql.operations.Params
 import com.github.ichanzhar.rsql.operations.ProcessorsFactory.Companion.getProcessor
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
 import org.springframework.data.jpa.domain.Specification
 import java.sql.Timestamp
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.stream.Collectors
@@ -56,7 +59,6 @@ class JpaRsqlSpecification<T>(
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
 		this.javaType = root.get<Any>(property).javaType
-
 		return arguments.stream().map<Any> { arg: String ->
 			when (javaType) {
 				Int::class.java -> {
@@ -72,12 +74,29 @@ class JpaRsqlSpecification<T>(
 					return@map arg.toBoolean()
 				}
 				Timestamp::class.java -> {
-					return@map SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(arg)
+					try {
+						return@map SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(arg)
+					} catch (e: ParseException) {
+						throw InvalidDateFormatException(arg, property)
+					}
 				}
 				else -> {
+					if(javaType?.isEnum == true) {
+						return@map getEnumValue(javaType, arg)
+					}
 					return@map arg
 				}
 			}
 		}.collect(Collectors.toList())
+	}
+
+	@Suppress("UNCHECKED_CAST")
+	private fun getEnumValue(enumClass: Class<out Any>?, value: String): Enum<*> {
+		val enumConstants = enumClass?.enumConstants as Array<out Enum<*>>
+		try {
+			return enumConstants.first { it.name == value }
+		} catch (e: NoSuchElementException) {
+			throw InvalidEnumValueException(enumClass, value)
+		}
 	}
 }
