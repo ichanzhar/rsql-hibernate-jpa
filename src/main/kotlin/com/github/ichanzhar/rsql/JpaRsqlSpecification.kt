@@ -6,14 +6,15 @@ import com.github.ichanzhar.rsql.operations.Params
 import com.github.ichanzhar.rsql.operations.ProcessorsFactory.Companion.getProcessor
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
+import org.joda.time.format.ISODateTimeFormat
 import org.springframework.data.jpa.domain.Specification
 import java.sql.Timestamp
 import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.time.*
 import java.util.*
 import java.util.stream.Collectors
 import javax.persistence.criteria.*
+
 
 class JpaRsqlSpecification<T>(
 	private val globalProperty: String,
@@ -74,9 +75,9 @@ class JpaRsqlSpecification<T>(
 				Boolean::class.java -> {
 					return@map arg.toBoolean()
 				}
-				Timestamp::class.java -> {
+				Timestamp::class.java, Date::class.java -> {
 					try {
-						return@map SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(arg)
+						return@map ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
 					} catch (e: ParseException) {
 						throw InvalidDateFormatException(arg, property)
 					}

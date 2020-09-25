@@ -5,8 +5,6 @@ import org.hibernate.query.criteria.internal.path.SetAttributeJoin
 import org.hibernate.query.criteria.internal.path.SingularAttributeJoin
 import org.slf4j.ext.XLogger
 import org.slf4j.ext.XLoggerFactory
-import java.lang.Exception
-import java.util.*
 import javax.persistence.metamodel.Attribute
 
 abstract class AbstractProcessor(protected val params: Params) : Processor {
@@ -16,8 +14,8 @@ abstract class AbstractProcessor(protected val params: Params) : Processor {
 		try {
 			if (RootImpl::class.java.isAssignableFrom(params.root.javaClass)) {
 				return MutableCollection::class.java.isAssignableFrom(
-                    (params.root as RootImpl<*>).entityType.getAttribute(params.globalProperty).javaType
-                )
+					(params.root as RootImpl<*>).entityType.getAttribute(params.globalProperty).javaType
+				)
 			}
 		} catch (ex: Exception) {
 			log.warn("unexpected error while root element collection: {}", ex.message)
@@ -40,8 +38,8 @@ abstract class AbstractProcessor(protected val params: Params) : Processor {
 		try {
 			if (SetAttributeJoin::class.java.isAssignableFrom(params.root.javaClass)) {
 				return MutableCollection::class.java.isAssignableFrom(
-                    params.root.get<Attribute<Any, Any>>(getPropertyNodeName()).javaType
-                )
+					params.root.get<Attribute<Any, Any>>(getPropertyNodeName()).javaType
+				)
 			}
 		} catch (ex: Exception) {
 			log.warn("unexpected error while checking set element collection: {}", ex.message)
@@ -54,8 +52,6 @@ abstract class AbstractProcessor(protected val params: Params) : Processor {
 			(params.argument as String).startsWith("*") || (params.argument as String).endsWith("*")
 		} else false
 	}
-
-	fun isDate(): Boolean = Date::class.java.isAssignableFrom(params.javaType)
 
 	fun getFormattedLikePattern(): String {
 		return params.argument.toString().replace('*', '%')
