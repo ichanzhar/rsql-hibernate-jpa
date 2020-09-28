@@ -64,7 +64,6 @@ class JpaRsqlSpecification<T>(
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
 		this.javaType = root.get<Any>(property).javaType
 		return arguments.stream().map<Any> { arg: String ->
-			arg.toShort()
 			when (javaType) {
 				Int::class.java -> return@map arg.toInt()
 				Long::class.java -> return@map arg.toLong()
