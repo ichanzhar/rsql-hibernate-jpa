@@ -8,6 +8,8 @@ import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
 import org.joda.time.format.ISODateTimeFormat
 import org.springframework.data.jpa.domain.Specification
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.sql.Timestamp
 import java.text.ParseException
 import java.time.*
@@ -62,51 +64,41 @@ class JpaRsqlSpecification<T>(
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
 		this.javaType = root.get<Any>(property).javaType
 		return arguments.stream().map<Any> { arg: String ->
+			arg.toShort()
 			when (javaType) {
-				Int::class.java -> {
-					return@map arg.toInt()
-				}
-				Long::class.java -> {
-					return@map arg.toLong()
-				}
-				UUID::class.java -> {
-					return@map UUID.fromString(arg)
-				}
-				Boolean::class.java -> {
-					return@map arg.toBoolean()
-				}
-				Timestamp::class.java, Date::class.java -> {
-					try {
-						return@map ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
-					} catch (e: ParseException) {
-						throw InvalidDateFormatException(arg, property)
-					}
-				}
-				LocalDate::class.java -> {
-					return@map LocalDate.parse(arg)
-				}
-				LocalDateTime::class.java -> {
-					return@map LocalDateTime.parse(arg)
-				}
-				LocalTime::class.java -> {
-					return@map LocalTime.parse(arg)
-				}
-				OffsetDateTime::class.java -> {
-					return@map OffsetDateTime.parse(arg)
-				}
-				ZonedDateTime::class.java -> {
-					return@map ZonedDateTime.parse(arg)
-				}
-				else -> {
-					if(javaType?.isEnum == true) {
-						return@map getEnumValue(javaType, arg)
-					}
-					return@map arg
-				}
+				Int::class.java -> return@map arg.toInt()
+				Long::class.java -> return@map arg.toLong()
+				BigInteger::class.java -> return@map arg.toBigInteger()
+				Double::class.java -> return@map arg.toDouble()
+				Float::class.java -> return@map arg.toFloat()
+				BigDecimal::class.java -> return@map arg.toBigDecimal()
+				Char::class.java -> return@map arg[0]
+				Short::class.java -> return@map arg.toShort()
+				Boolean::class.java -> return@map arg.toBoolean()
+				UUID::class.java -> return@map UUID.fromString(arg)
+				Timestamp::class.java, Date::class.java -> return@map parseDate(arg, property)
+				LocalDate::class.java -> return@map LocalDate.parse(arg)
+				LocalDateTime::class.java -> return@map LocalDateTime.parse(arg)
+				LocalTime::class.java -> return@map LocalTime.parse(arg)
+				OffsetDateTime::class.java -> return@map OffsetDateTime.parse(arg)
+				ZonedDateTime::class.java -> return@map ZonedDateTime.parse(arg)
+				::isEnum -> return@map getEnumValue(javaType, arg)
+				else -> return@map arg
 			}
 		}.collect(Collectors.toList())
 	}
 
+	private fun isEnum(clazz: Class<out Any>?) : Boolean {
+		return clazz?.isEnum == true
+	}
+
+	private fun parseDate(arg: String, property: String?) : Date {
+		try {
+			return ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
+		} catch (e: ParseException) {
+			throw InvalidDateFormatException(arg, property)
+		}
+	}
 	@Suppress("UNCHECKED_CAST")
 	private fun getEnumValue(enumClass: Class<out Any>?, value: String): Enum<*> {
 		val enumConstants = enumClass?.enumConstants as Array<out Enum<*>>
