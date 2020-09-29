@@ -81,13 +81,17 @@ class JpaRsqlSpecification<T>(
 				LocalTime::class.java -> return@map LocalTime.parse(arg)
 				OffsetDateTime::class.java -> return@map OffsetDateTime.parse(arg)
 				ZonedDateTime::class.java -> return@map ZonedDateTime.parse(arg)
-				::isEnum -> return@map getEnumValue(javaType, arg)
-				else -> return@map arg
+				else -> {
+					if(isEnumClass(javaType)) {
+						return@map getEnumValue(javaType, arg)
+					}
+					return@map arg
+				}
 			}
 		}.collect(Collectors.toList())
 	}
 
-	private fun isEnum(clazz: Class<out Any>?) : Boolean {
+	private fun isEnumClass(clazz: Class<out Any>?) : Boolean {
 		return clazz?.isEnum == true
 	}
 
