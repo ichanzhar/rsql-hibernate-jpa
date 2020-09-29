@@ -6,9 +6,6 @@ import cz.jirutka.rsql.parser.ast.LogicalOperator
 import cz.jirutka.rsql.parser.ast.Node
 import org.springframework.data.jpa.domain.Specification
 
-import java.util.*
-import java.util.stream.Collectors
-
 class GenericRsqlSpecBuilder<E> {
 
 	fun createSpecification(node: Node): Specification<E>? {
@@ -23,10 +20,9 @@ class GenericRsqlSpecBuilder<E> {
 
 	fun createSpecification(logicalNode: LogicalNode): Specification<E> {
 		val specs: MutableList<Specification<E>> = logicalNode.children
-			.stream()
-			.map { node: Node -> createSpecification(node) }
-			.filter(Objects::nonNull)
-			.collect(Collectors.toList())
+			.mapNotNull { createSpecification(it) }
+			.toMutableList()
+
 		var result: Specification<E> = specs[0]
 		if (logicalNode.operator == LogicalOperator.AND) {
 			for (i in 1 until specs.size) {
@@ -42,12 +38,12 @@ class GenericRsqlSpecBuilder<E> {
 
 	fun createSpecification(comparisonNode: ComparisonNode): Specification<E>? {
 		return Specification.where(
-            JpaRsqlSpecification<E>(
-                comparisonNode.selector,
-                comparisonNode.operator,
-                comparisonNode.arguments
-            )
-        )
+			JpaRsqlSpecification<E>(
+				comparisonNode.selector,
+				comparisonNode.operator,
+				comparisonNode.arguments
+			)
+		)
 	}
 
 }

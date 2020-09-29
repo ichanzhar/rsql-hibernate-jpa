@@ -6,12 +6,12 @@ import com.github.ichanzhar.rsql.operations.Params
 import com.github.ichanzhar.rsql.operations.ProcessorsFactory.Companion.getProcessor
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
+import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.ISODateTimeFormat
 import org.springframework.data.jpa.domain.Specification
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.sql.Timestamp
-import java.text.ParseException
 import java.time.*
 import java.util.*
 import java.util.stream.Collectors
@@ -98,10 +98,14 @@ class JpaRsqlSpecification<T>(
 	private fun parseDate(arg: String, property: String?) : Date {
 		try {
 			return ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
-		} catch (e: ParseException) {
+		} catch (e: Exception) { }
+		try {
+			return DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS").parseDateTime(arg).toDate()
+		} catch (e: Exception) {
 			throw InvalidDateFormatException(arg, property)
 		}
 	}
+
 	@Suppress("UNCHECKED_CAST")
 	private fun getEnumValue(enumClass: Class<out Any>?, value: String): Enum<*> {
 		val enumConstants = enumClass?.enumConstants as Array<out Enum<*>>
