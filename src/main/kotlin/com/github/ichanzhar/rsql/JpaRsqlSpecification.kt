@@ -62,7 +62,7 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		this.javaType = root.get<Any>(property).javaType
+		this.javaType = getPropertyJavaType(root.get<Any>(property).javaType)
 		return arguments.stream().map<Any> { arg: String ->
 			when (javaType) {
 				Int::class.java -> return@map arg.toInt()
@@ -82,7 +82,7 @@ class JpaRsqlSpecification<T>(
 				OffsetDateTime::class.java -> return@map OffsetDateTime.parse(arg)
 				ZonedDateTime::class.java -> return@map ZonedDateTime.parse(arg)
 				else -> {
-					if(isEnumClass(javaType)) {
+					if (isEnumClass(javaType)) {
 						return@map getEnumValue(javaType, arg)
 					}
 					return@map arg
@@ -91,11 +91,11 @@ class JpaRsqlSpecification<T>(
 		}.collect(Collectors.toList())
 	}
 
-	private fun isEnumClass(clazz: Class<out Any>?) : Boolean {
+	private fun isEnumClass(clazz: Class<out Any>?): Boolean {
 		return clazz?.isEnum == true
 	}
 
-	private fun parseDate(arg: String, property: String?) : Date {
+	private fun parseDate(arg: String, property: String?): Date {
 		try {
 			return ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
 		} catch (e: Exception) { }
@@ -115,4 +115,25 @@ class JpaRsqlSpecification<T>(
 			throw InvalidEnumValueException(enumClass, value)
 		}
 	}
+
+
+	private fun getPropertyJavaType(propertyJavaType: Class<out Any>?): Class<out Any>? {
+		return typesWrapper.getOrDefault(propertyJavaType?.name, propertyJavaType)
+	}
+
+	private val typesWrapper = mutableMapOf<String, Class<out Any>>()
+
+	init {
+		typesWrapper.put("java.lang.Boolean", Boolean::class.java)
+		typesWrapper.put("boolean", Boolean::class.java)
+		typesWrapper.put("byte", Byte::class.java)
+		typesWrapper.put("char", Character::class.java)
+		typesWrapper.put("double", Double::class.java)
+		typesWrapper.put("float", Float::class.java)
+		typesWrapper.put("int", Integer::class.java)
+		typesWrapper.put("long", Long::class.java)
+		typesWrapper.put("short", Short::class.java)
+	}
+
+
 }
