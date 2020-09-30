@@ -1,20 +1,13 @@
 package com.github.ichanzhar.rsql
 
-import com.github.ichanzhar.rsql.exception.InvalidDateFormatException
-import com.github.ichanzhar.rsql.exception.InvalidEnumValueException
 import com.github.ichanzhar.rsql.operations.Params
 import com.github.ichanzhar.rsql.operations.ProcessorsFactory.Companion.getProcessor
+import com.github.ichanzhar.rsql.utils.ArgumentConvertor
+import com.github.ichanzhar.rsql.utils.JavaTypeUtil
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.ISODateTimeFormat
 import org.springframework.data.jpa.domain.Specification
-import java.math.BigDecimal
-import java.math.BigInteger
-import java.sql.Timestamp
-import java.time.*
 import java.util.*
-import java.util.stream.Collectors
 import javax.persistence.criteria.*
 
 
@@ -62,78 +55,8 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		this.javaType = getPropertyJavaType(root.get<Any>(property).javaType)
-		return arguments.stream().map<Any> { arg: String ->
-			when (javaType) {
-				Int::class.java -> return@map arg.toInt()
-				Long::class.java -> return@map arg.toLong()
-				BigInteger::class.java -> return@map arg.toBigInteger()
-				Double::class.java -> return@map arg.toDouble()
-				Float::class.java -> return@map arg.toFloat()
-				BigDecimal::class.java -> return@map arg.toBigDecimal()
-				Char::class.java -> return@map arg[0]
-				Short::class.java -> return@map arg.toShort()
-				Boolean::class.java -> return@map arg.toBoolean()
-				UUID::class.java -> return@map UUID.fromString(arg)
-				Timestamp::class.java, Date::class.java -> return@map parseDate(arg, property)
-				LocalDate::class.java -> return@map LocalDate.parse(arg)
-				LocalDateTime::class.java -> return@map LocalDateTime.parse(arg)
-				LocalTime::class.java -> return@map LocalTime.parse(arg)
-				OffsetDateTime::class.java -> return@map OffsetDateTime.parse(arg)
-				ZonedDateTime::class.java -> return@map ZonedDateTime.parse(arg)
-				else -> {
-					if (isEnumClass(javaType)) {
-						return@map getEnumValue(javaType, arg)
-					}
-					return@map arg
-				}
-			}
-		}.collect(Collectors.toList())
+		this.javaType = JavaTypeUtil.getPropertyJavaType(root.get<Any>(property).javaType)
+		return arguments.map { ArgumentConvertor.castArgument(it, property, this.javaType) }.toList()
 	}
-
-	private fun isEnumClass(clazz: Class<out Any>?): Boolean {
-		return clazz?.isEnum == true
-	}
-
-	private fun parseDate(arg: String, property: String?): Date {
-		try {
-			return ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
-		} catch (e: Exception) { }
-		try {
-			return DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS").parseDateTime(arg).toDate()
-		} catch (e: Exception) {
-			throw InvalidDateFormatException(arg, property)
-		}
-	}
-
-	@Suppress("UNCHECKED_CAST")
-	private fun getEnumValue(enumClass: Class<out Any>?, value: String): Enum<*> {
-		val enumConstants = enumClass?.enumConstants as Array<out Enum<*>>
-		try {
-			return enumConstants.first { it.name == value }
-		} catch (e: NoSuchElementException) {
-			throw InvalidEnumValueException(enumClass, value)
-		}
-	}
-
-
-	private fun getPropertyJavaType(propertyJavaType: Class<out Any>?): Class<out Any>? {
-		return typesWrapper.getOrDefault(propertyJavaType?.name, propertyJavaType)
-	}
-
-	private val typesWrapper = mutableMapOf<String, Class<out Any>>()
-
-	init {
-		typesWrapper.put("java.lang.Boolean", Boolean::class.java)
-		typesWrapper.put("boolean", Boolean::class.java)
-		typesWrapper.put("byte", Byte::class.java)
-		typesWrapper.put("char", Character::class.java)
-		typesWrapper.put("double", Double::class.java)
-		typesWrapper.put("float", Float::class.java)
-		typesWrapper.put("int", Integer::class.java)
-		typesWrapper.put("long", Long::class.java)
-		typesWrapper.put("short", Short::class.java)
-	}
-
 
 }
