@@ -1,7 +1,5 @@
 # rsql-hibernate-jpa
-[![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.github.ichanzhar/rsql-hibernate-jpa?label=Release&color=blue&logo=Release&server=https%3A%2F%2Foss.sonatype.org)](https://oss.sonatype.org/#nexus-search;gav~com.github.ichanzhar~rsql-hibernate-jpa)
-[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/com.github.ichanzhar/rsql-hibernate-jpa?label=Snapshot&logo=Snapshot&color=blue&server=https%3A%2F%2Foss.sonatype.org)](https://oss.sonatype.org/#nexus-search;gav~com.github.ichanzhar~rsql-hibernate-jpa)
-
+[![Sonatype Nexus (Releases)](https://img.shields.io/maven-central/v/com.github.ichanzhar/rsql-hibernate-jpa?label=Release)](https://oss.sonatype.org/#nexus-search;gav~com.github.ichanzhar~rsql-hibernate-jpa)
 RSQL implementation for Hibernate/Spring data with join tables support
 
 ## Dependencies:
