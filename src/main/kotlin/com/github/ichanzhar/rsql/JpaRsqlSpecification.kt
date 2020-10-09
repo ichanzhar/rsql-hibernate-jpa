@@ -16,9 +16,9 @@ class JpaRsqlSpecification<T>(
 	private val operator: ComparisonOperator,
 	private val arguments: List<String>
 ) : Specification<T> {
-	private var javaType: Class<out Any>? = null
+
 	override fun toPredicate(root: Root<T>, query: CriteriaQuery<*>, builder: CriteriaBuilder): Predicate {
-		query.distinct(true)
+		//query.distinct(true)
 		if (containsJoins(globalProperty)) {
 			val tokenizer = StringTokenizer(globalProperty, ".")
 			val token = tokenizer.nextToken()
@@ -32,7 +32,7 @@ class JpaRsqlSpecification<T>(
 
 	private fun toPredicate(root: Path<T>, builder: CriteriaBuilder?, property: String?): Predicate {
 		val args = castArguments(root, property)
-		val params = Params(root, builder!!, property!!, globalProperty, args, args[0], javaType)
+		val params = Params(root, builder!!, property!!, globalProperty, args, args[0])
 		return getProcessor(operator, params).process()
 	}
 
@@ -46,17 +46,17 @@ class JpaRsqlSpecification<T>(
 
 	private fun getPath(root: Root<T>, tokenizer: StringTokenizer, token: String): Path<T> {
 		var joinToken: String? = token
-		var join: Join<*, T> = root.join<Any, T>(joinToken)
+		var join: Join<*, T> = root.join<Any, T>(joinToken, JoinType.LEFT)
 		while (tokenizer.countTokens() >= 2) {
 			joinToken = tokenizer.nextToken()
-			join = join.join<Any, T>(joinToken)
+			join = join.join<Any, T>(joinToken, JoinType.LEFT)
 		}
 		return join
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		this.javaType = JavaTypeUtil.getPropertyJavaType(root.get<Any>(property).javaType)
-		return arguments.map { ArgumentConvertor.castArgument(it, property, this.javaType) }.toList()
+		val javaType = JavaTypeUtil.getPropertyJavaType(root.get<Any>(property).javaType)
+		return arguments.map { ArgumentConvertor.castArgument(it, property, javaType) }.toList()
 	}
 
 }
