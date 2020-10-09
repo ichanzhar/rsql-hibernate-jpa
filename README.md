@@ -1,6 +1,7 @@
 # rsql-hibernate-jpa
 [![Sonatype Nexus (Releases)](https://img.shields.io/maven-central/v/com.github.ichanzhar/rsql-hibernate-jpa?label=Release)](https://oss.sonatype.org/#nexus-search;gav~com.github.ichanzhar~rsql-hibernate-jpa)
-RSQL implementation for Hibernate/Spring data with join tables support
+
+* RSQL implementation for Hibernate/Spring data with join tables support
 
 ## Dependencies:
 * Hibernate Core 5.4.21.Final
