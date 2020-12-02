@@ -12,7 +12,8 @@ enum class RsqlOperation(val operator: ComparisonOperator) {
 	LESS_THAN(RSQLOperators.LESS_THAN),
 	LESS_THAN_OR_EQUAL(RSQLOperators.LESS_THAN_OR_EQUAL),
 	IN(RSQLOperators.IN),
-	NOT_IN(RSQLOperators.NOT_IN);
+	NOT_IN(RSQLOperators.NOT_IN),
+	IS_NULL(ComparisonOperator("=isNull="));
 
 	companion object {
 		fun getSimpleOperator(operator: ComparisonOperator): RsqlOperation {
