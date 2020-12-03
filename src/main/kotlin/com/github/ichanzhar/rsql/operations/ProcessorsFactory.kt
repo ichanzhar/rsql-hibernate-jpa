@@ -15,6 +15,7 @@ class ProcessorsFactory {
                 RsqlOperation.LESS_THAN_OR_EQUAL -> LteProcessor(params)
                 RsqlOperation.IN -> InProcessor(params)
                 RsqlOperation.NOT_IN -> NotInProcessor(params)
+                RsqlOperation.IS_NULL -> IsNullProcessor(params)
 			}
 		}
 	}
