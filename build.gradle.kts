@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.ichanzhar"
-version = "0.9"
+version = "0.10-SNAPSHOT"
 
 repositories {
     mavenCentral()

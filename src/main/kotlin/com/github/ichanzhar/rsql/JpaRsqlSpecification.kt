@@ -6,6 +6,7 @@ import com.github.ichanzhar.rsql.utils.ArgumentConvertor
 import com.github.ichanzhar.rsql.utils.JavaTypeUtil
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import org.apache.commons.lang3.StringUtils
+import org.hibernate.query.criteria.internal.path.RootImpl
 import org.springframework.data.jpa.domain.Specification
 import java.util.*
 import javax.persistence.criteria.*
@@ -55,7 +56,18 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		val javaType = JavaTypeUtil.getPropertyJavaType(root.get<Any>(property).javaType)
+		var jt = root.get<Any>(property).javaType
+		try {
+			val field = (root as RootImpl).entityType.javaType.declaredFields.first { it.name == property }
+			if(Collection::class.java.isAssignableFrom(field.type)) {
+				val genericType = field.genericType as java.lang.reflect.ParameterizedType
+				jt  = Class.forName(genericType.actualTypeArguments[0].typeName)
+			}
+		} catch (e: Throwable) {
+			//todo handle more cases
+		}
+
+		val javaType = JavaTypeUtil.getPropertyJavaType(jt)
 		return arguments.map { ArgumentConvertor.castArgument(it, property, javaType) }.toList()
 	}
 
