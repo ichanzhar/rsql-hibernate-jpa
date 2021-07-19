@@ -15,11 +15,12 @@ import javax.persistence.criteria.*
 class JpaRsqlSpecification<T>(
 	private val globalProperty: String,
 	private val operator: ComparisonOperator,
-	private val arguments: List<String>
+	private val arguments: List<String>,
+	private val distinct: Boolean,
 ) : Specification<T> {
 
 	override fun toPredicate(root: Root<T>, query: CriteriaQuery<*>, builder: CriteriaBuilder): Predicate {
-		//query.distinct(true)
+		if(distinct) query.distinct(true)
 		if (containsJoins(globalProperty)) {
 			val tokenizer = StringTokenizer(globalProperty, ".")
 			val token = tokenizer.nextToken()

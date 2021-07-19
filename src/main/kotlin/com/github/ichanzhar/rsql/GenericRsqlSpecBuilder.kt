@@ -6,7 +6,7 @@ import cz.jirutka.rsql.parser.ast.LogicalOperator
 import cz.jirutka.rsql.parser.ast.Node
 import org.springframework.data.jpa.domain.Specification
 
-class GenericRsqlSpecBuilder<E> {
+class GenericRsqlSpecBuilder<E>(val distinct: Boolean) {
 
 	fun createSpecification(node: Node): Specification<E>? {
 		if (node is LogicalNode) {
@@ -41,7 +41,8 @@ class GenericRsqlSpecBuilder<E> {
 			JpaRsqlSpecification<E>(
 				comparisonNode.selector,
 				comparisonNode.operator,
-				comparisonNode.arguments
+				comparisonNode.arguments,
+				distinct
 			)
 		)
 	}

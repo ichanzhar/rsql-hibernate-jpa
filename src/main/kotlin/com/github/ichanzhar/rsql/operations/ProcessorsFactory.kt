@@ -17,6 +17,7 @@ class ProcessorsFactory {
 				RsqlOperation.NOT_IN -> NotInProcessor(params)
 				RsqlOperation.IS_NULL -> IsNullProcessor(params)
 				RsqlOperation.EQUAL_CI -> EqualCiProcessor(params)
+				RsqlOperation.IS_EMPTY -> IsEmptyProcessor(params)
 			}
 		}
 	}
