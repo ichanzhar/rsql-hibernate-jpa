@@ -57,6 +57,12 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
+		val argumentJavaType = getArgumentJavaType(root, property)
+		val propertyJavaType = JavaTypeUtil.getPropertyJavaType(argumentJavaType)
+		return arguments.map { ArgumentConvertor.castArgument(it, property, propertyJavaType) }.toList()
+	}
+
+	private fun getArgumentJavaType(root: Path<T>, property: String?): Class<out Any>? {
 		var jt = root.get<Any>(property).javaType
 		try {
 			val field = (root as RootImpl).entityType.javaType.declaredFields.first { it.name == property }
@@ -67,9 +73,7 @@ class JpaRsqlSpecification<T>(
 		} catch (e: Throwable) {
 			//todo handle more cases
 		}
-
-		val javaType = JavaTypeUtil.getPropertyJavaType(jt)
-		return arguments.map { ArgumentConvertor.castArgument(it, property, javaType) }.toList()
+		return jt
 	}
 
 }

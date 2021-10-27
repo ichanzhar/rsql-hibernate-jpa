@@ -18,6 +18,8 @@ class ProcessorsFactory {
 				RsqlOperation.IS_NULL -> IsNullProcessor(params)
 				RsqlOperation.EQUAL_CI -> EqualCiProcessor(params)
 				RsqlOperation.IS_EMPTY -> IsEmptyProcessor(params)
+				RsqlOperation.JSONB_EQ -> JsonbEqualProcessor(params)
+				RsqlOperation.JSON_EQ -> JsonEqualProcessor(params)
 			}
 		}
 	}

@@ -15,7 +15,9 @@ enum class RsqlOperation(val operator: ComparisonOperator) {
 	NOT_IN(RSQLOperators.NOT_IN),
 	IS_NULL(ComparisonOperator("=isNull=")),
 	EQUAL_CI(ComparisonOperator("=eqci=")),/*case insensitive equility operator*/
-	IS_EMPTY(ComparisonOperator("=isEmpty="));
+	IS_EMPTY(ComparisonOperator("=isEmpty=")),
+	JSONB_EQ(ComparisonOperator("=jsonbeq=")),
+	JSON_EQ(ComparisonOperator("=jsoneq="));
 
 	companion object {
 		fun getSimpleOperator(operator: ComparisonOperator): RsqlOperation {
