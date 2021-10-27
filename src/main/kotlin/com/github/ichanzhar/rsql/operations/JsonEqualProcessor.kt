@@ -9,7 +9,7 @@ import javax.persistence.criteria.Predicate
 class JsonEqualProcessor(params: Params) : AbstractProcessor(params) {
 	override fun process(): Predicate {
 		val args = (params.args[0] as String).split("|")
-		if (params.args.size != 2) {
+		if (args.size != 2) {
 			throw IllegalArgumentException("=jsoneq= operator expects 2 parts json path and value my.path|myvalue")
 		}
 		val path = args[0].split(".").map { params.builder.literal(it) }.toTypedArray()
