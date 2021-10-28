@@ -10,7 +10,7 @@ class JsonbEqualProcessor(params: Params) : AbstractProcessor(params) {
 	override fun process(): Predicate {
 		val args = (params.args[0] as String).split("|")
 		if (args.size != 2) {
-			throw IllegalArgumentException("=jsoneq= operator expects 2 parts json path and value my.path|myvalue")
+			throw IllegalArgumentException("=jsonbeq= operator expects 2 parts json path and value my.path|myvalue")
 		}
 		val path = args[0].split(".").map { params.builder.literal(it) }.toTypedArray()
 		val argument = args[1]
