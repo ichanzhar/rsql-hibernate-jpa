@@ -1,15 +1,16 @@
 package com.github.ichanzhar.rsql
 
 import com.github.ichanzhar.rsql.operations.Params
-import com.github.ichanzhar.rsql.operations.ProcessorsFactory.Companion.getProcessor
+import com.github.ichanzhar.rsql.operations.ProcessorsFactory.getProcessor
 import com.github.ichanzhar.rsql.utils.ArgumentConvertor
 import com.github.ichanzhar.rsql.utils.JavaTypeUtil
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
+import jakarta.persistence.criteria.*
+import jakarta.persistence.metamodel.Attribute
 import org.apache.commons.lang3.StringUtils
-import org.hibernate.query.criteria.internal.path.RootImpl
+import org.hibernate.query.criteria.JpaRoot
 import org.springframework.data.jpa.domain.Specification
 import java.util.*
-import javax.persistence.criteria.*
 
 
 class JpaRsqlSpecification<T>(
@@ -39,7 +40,8 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun isAssociation(root: Root<T>, propertyName: String): Boolean {
-		return root.model.getAttribute(propertyName).isAssociation || root.model.getAttribute(propertyName).persistentAttributeType.name == "EMBEDDED"
+		return root.model.getAttribute(propertyName).isAssociation ||
+				root.model.getAttribute(propertyName).persistentAttributeType == Attribute.PersistentAttributeType.EMBEDDED
 	}
 
 	private fun containsJoins(property: String): Boolean {
@@ -57,23 +59,23 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun castArguments(root: Path<T>, property: String?): List<Any> {
-		val argumentJavaType = getArgumentJavaType(root, property)
+		val argumentJavaType = root.get<Any>(property).model.bindableJavaType
 		val propertyJavaType = JavaTypeUtil.getPropertyJavaType(argumentJavaType)
 		return arguments.map { ArgumentConvertor.castArgument(it, property, propertyJavaType) }.toList()
 	}
 
-	private fun getArgumentJavaType(root: Path<T>, property: String?): Class<out Any>? {
-		var jt = root.get<Any>(property).javaType
-		try {
-			val field = (root as RootImpl).entityType.javaType.declaredFields.first { it.name == property }
-			if(Collection::class.java.isAssignableFrom(field.type)) {
-				val genericType = field.genericType as java.lang.reflect.ParameterizedType
-				jt  = Class.forName(genericType.actualTypeArguments[0].typeName)
-			}
-		} catch (e: Throwable) {
-			//todo handle more cases
-		}
-		return jt
-	}
+//	private fun getArgumentJavaType(root: Path<T>, property: String?): Class<out Any>? {
+//		var jt = root.get<Any>(property).javaType
+//		try {
+//			val field = (root as JpaRoot).model.javaType.declaredFields.first { it.name == property }
+//			if(Collection::class.java.isAssignableFrom(field.type)) {
+//				val genericType = field.genericType as java.lang.reflect.ParameterizedType
+//				jt  = Class.forName(genericType.actualTypeArguments[0].typeName)
+//			}
+//		} catch (e: Throwable) {
+//			//todo handle more cases
+//		}
+//		return jt
+//	}
 
 }

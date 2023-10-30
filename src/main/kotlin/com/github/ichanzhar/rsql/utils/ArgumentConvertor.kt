@@ -2,13 +2,13 @@ package com.github.ichanzhar.rsql.utils
 
 import com.github.ichanzhar.rsql.exception.InvalidDateFormatException
 import com.github.ichanzhar.rsql.exception.InvalidEnumValueException
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.ISODateTimeFormat
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.sql.Timestamp
 import java.time.*
+import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 object ArgumentConvertor {
 
@@ -49,10 +49,10 @@ object ArgumentConvertor {
 
 	private fun parseDate(arg: String, property: String?): Date {
 		try {
-			return ISODateTimeFormat.dateTimeParser().parseDateTime(arg).toDate()
+			return Date.from(LocalDateTime.parse(arg).atZone(ZoneId.systemDefault()).toInstant())
 		} catch (e: Exception) { }
 		try {
-			return DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss.SSS").parseDateTime(arg).toDate()
+			return Date.from(LocalDateTime.parse(arg, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")).atZone(ZoneId.systemDefault()).toInstant())
 		} catch (e: Exception) {
 			throw InvalidDateFormatException(arg, property)
 		}

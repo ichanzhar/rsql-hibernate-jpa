@@ -1,10 +1,7 @@
 package com.github.ichanzhar.rsql.operations
 
-import org.hibernate.query.criteria.internal.path.RootImpl
-import org.hibernate.query.criteria.internal.path.SetAttributeJoin
-import org.hibernate.query.criteria.internal.path.SingularAttributeJoin
-import javax.persistence.criteria.Expression
-import javax.persistence.criteria.Predicate
+import jakarta.persistence.criteria.*
+import org.hibernate.query.criteria.*
 
 class JsonEqualProcessor(params: Params) : AbstractProcessor(params) {
 	override fun process(): Predicate {
@@ -14,39 +11,48 @@ class JsonEqualProcessor(params: Params) : AbstractProcessor(params) {
 		}
 		val path = args[0].split(".").map { params.builder.literal(it) }.toTypedArray()
 		val argument = args[1]
-		if (isRootJoin()) {
-			return params.builder.equal(
-				params.builder.function(
-					"json_extract_path_text",
-					String::class.java,
-					(params.root as RootImpl).join<Any, Any>(params.property),
-					*path
-				),
-				argument
-			)
-		} else if (isSingularJoin()) {
-			return params.builder.equal(
-				params.builder.function(
-					"json_extract_path_text",
-					String::class.java,
-					(params.root as SingularAttributeJoin<*, *>).join<Any, Any>(params.property),
-					*path
-				),
-				argument
-			)
-		} else if (isSetJoin()) {
-			return params.builder.equal(
-				(params.root as SetAttributeJoin<*, *>).join<Any, Any>(params.property), params.argument)
-		} else {
-            return params.builder.equal(
-                params.builder.function(
-                    "json_extract_path_text",
-                    String::class.java,
-                    params.root.get<Any>(params.property),
-					*path
-                ),
-                argument
-            )
+		when {
+			isRootJoin() -> {
+				return params.builder.equal(
+					params.builder.function(
+						"json_extract_path_text",
+						String::class.java,
+						(params.root as JpaRoot).join<Any, Any>(params.property),
+						*path
+					),
+					argument
+				)
+			}
+			isCollectionJoin() -> {
+				return params.builder.equal(
+					params.builder.function(
+						"json_extract_path_text",
+						String::class.java,
+						(params.root as CollectionJoin<*, *>).join<Any, Any>(params.property),
+						*path
+					),
+					argument
+				)
+			}
+			isSetJoin() -> {
+				return params.builder.equal(
+					(params.root as SetJoin<*, *>).join<Any, Any>(params.property), params.argument)
+			}
+			isListJoin() -> {
+				return params.builder.equal(
+					(params.root as ListJoin<*, *>).join<Any, Any>(params.property), params.argument)
+			}
+			else -> {
+				return params.builder.equal(
+					params.builder.function(
+						"json_extract_path_text",
+						String::class.java,
+						params.root.get<Any>(params.property),
+						*path
+					),
+					argument
+				)
+			}
 		}
 	}
 }

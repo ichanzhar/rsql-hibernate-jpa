@@ -26,11 +26,11 @@ class GenericRsqlSpecBuilder<E>(val distinct: Boolean) {
 		var result: Specification<E> = specs[0]
 		if (logicalNode.operator == LogicalOperator.AND) {
 			for (i in 1 until specs.size) {
-				result = Specification.where(result)?.and(specs[i])!!
+				result = Specification.where(result).and(specs[i])
 			}
 		} else if (logicalNode.operator == LogicalOperator.OR) {
 			for (i in 1 until specs.size) {
-				result = Specification.where(result)?.or(specs[i])!!
+				result = Specification.where(result).or(specs[i])
 			}
 		}
 		return result

@@ -1,6 +1,6 @@
 package com.github.ichanzhar.rsql.operations
 
-import javax.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Predicate
 
 class LteProcessor(params: Params) : AbstractProcessor(params) {
 	@Suppress("UNCHECKED_CAST")

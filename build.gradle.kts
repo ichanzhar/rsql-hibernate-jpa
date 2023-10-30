@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.7.21"
     `maven-publish`
     signing
 }
 
 group = "com.github.ichanzhar"
-version = "0.13"
+version = "0.14-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -15,22 +15,21 @@ repositories {
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
-    api("joda-time:joda-time:2.10.6")
-    implementation("org.hibernate:hibernate-core:5.5.4.Final")
+    implementation("org.hibernate:hibernate-core:6.1.7.Final")
     api("org.apache.commons:commons-lang3:3.11")
-    implementation("org.springframework.data:spring-data-jpa:2.2.9.RELEASE")
+    implementation("org.springframework.data:spring-data-jpa:3.0.6")
     implementation("org.slf4j:slf4j-ext:1.7.30")
 }
 
 java {
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType<KotlinCompile>() {
     kotlinOptions{
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 

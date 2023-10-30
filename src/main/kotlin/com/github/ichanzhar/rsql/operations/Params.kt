@@ -1,7 +1,6 @@
 package com.github.ichanzhar.rsql.operations
 
-import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.Path
+import jakarta.persistence.criteria.*
 
 
 data class Params(

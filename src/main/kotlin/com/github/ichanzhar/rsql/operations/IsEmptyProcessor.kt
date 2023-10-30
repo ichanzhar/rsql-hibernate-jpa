@@ -1,6 +1,6 @@
 package com.github.ichanzhar.rsql.operations
 
-import javax.persistence.criteria.Predicate
+import jakarta.persistence.criteria.*
 
 class IsEmptyProcessor(params: Params) : AbstractProcessor(params) {
 	override fun process(): Predicate {
