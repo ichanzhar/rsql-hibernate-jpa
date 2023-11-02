@@ -19,6 +19,7 @@ object ProcessorsFactory {
 			RsqlOperation.IS_EMPTY -> IsEmptyProcessor(params)
 			RsqlOperation.JSONB_EQ -> JsonbEqualProcessor(params)
 			RsqlOperation.JSON_EQ -> JsonEqualProcessor(params)
+			RsqlOperation.JSONB_IN -> JsonbInProcessor(params)
 		}
 	}
 

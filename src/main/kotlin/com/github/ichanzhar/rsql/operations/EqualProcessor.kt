@@ -9,11 +9,11 @@ class EqualProcessor(params: Params) : AbstractProcessor(params) {
             isRootJoin() -> {
                 return if (isLikeExpression()) {
                     params.builder.like(
-                        (params.root as JpaRoot).join<Any, String>(params.property)  as Expression<String>,
+                        (params.root as JpaRoot<*>).join<Any, String>(params.property)  as Expression<String>,
                         getFormattedLikePattern()
                     )
                 } else params.builder.equal(
-                    (params.root as JpaRoot).join<Any, Any>(params.property),
+                    (params.root as JpaRoot<*>).join<Any, Any>(params.property),
                     params.argument
                 )
             }

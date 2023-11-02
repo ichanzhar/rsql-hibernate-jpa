@@ -9,10 +9,10 @@ class NotEqualProcessor(params: Params) : AbstractProcessor(params) {
             isRootJoin() -> {
                 return if (isLikeExpression()) {
                     params.builder.notLike(
-                        (params.root as JpaRoot).join<Any, String>(params.property)  as Expression<String>,
+                        (params.root as JpaRoot<*>).join<Any, String>(params.property)  as Expression<String>,
                         getFormattedLikePattern()
                     )
-                } else params.builder.notEqual((params.root as JpaRoot).join<Any, Any>(params.property), params.argument)
+                } else params.builder.notEqual((params.root as JpaRoot<*>).join<Any, Any>(params.property), params.argument)
             }
             isCollectionJoin() -> {
                 return if (isLikeExpression()) {

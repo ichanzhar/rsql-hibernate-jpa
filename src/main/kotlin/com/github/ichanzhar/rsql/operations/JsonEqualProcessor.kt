@@ -17,7 +17,7 @@ class JsonEqualProcessor(params: Params) : AbstractProcessor(params) {
 					params.builder.function(
 						"json_extract_path_text",
 						String::class.java,
-						(params.root as JpaRoot).join<Any, Any>(params.property),
+						(params.root as JpaRoot<*>).join<Any, Any>(params.property),
 						*path
 					),
 					argument
