@@ -17,8 +17,7 @@ enum class RsqlOperation(val operator: ComparisonOperator, val context: ParserCo
 	EQUAL_CI(ComparisonOperator("=eqci="), ParserContext.COMMON),/*case insensitive equility operator*/
 	IS_EMPTY(ComparisonOperator("=isEmpty="), ParserContext.COMMON),
 	JSONB_EQ(ComparisonOperator("=jsonbeq="), ParserContext.POSTGRESQL),
-	JSON_EQ(ComparisonOperator("=jsoneq="), ParserContext.POSTGRESQL),
-	JSONB_IN(ComparisonOperator("=jsonbin="), ParserContext.POSTGRESQL),;
+	JSON_EQ(ComparisonOperator("=jsoneq="), ParserContext.POSTGRESQL),;
 
 	companion object {
 		fun getSimpleOperator(operator: ComparisonOperator): RsqlOperation {
