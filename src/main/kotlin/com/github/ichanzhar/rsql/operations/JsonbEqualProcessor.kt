@@ -20,7 +20,7 @@ class JsonbEqualProcessor(params: Params) : AbstractProcessor(params) {
 					params.builder.function(
 						"jsonb_extract_path_text",
 						String::class.java,
-						(params.root as JpaRoot).join<Any, Any>(params.property),
+						(params.root as JpaRoot<*>).join<Any, Any>(params.property),
 						*path
 					),
 					argument

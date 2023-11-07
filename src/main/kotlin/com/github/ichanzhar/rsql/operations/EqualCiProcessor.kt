@@ -8,7 +8,7 @@ class EqualCiProcessor(params: Params) : AbstractProcessor(params) {
 		when {
 			isRootJoin() -> {
 				return params.builder.like(
-					params.builder.lower((params.root as JpaRoot).join<Any, String>(params.property) as Expression<String>),
+					params.builder.lower((params.root as JpaRoot<*>).join<Any, String>(params.property) as Expression<String>),
 					getFormattedLikePattern().lowercase()
 				)
 			}
