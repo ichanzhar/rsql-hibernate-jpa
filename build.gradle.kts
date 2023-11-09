@@ -15,10 +15,10 @@ repositories {
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
-    implementation("org.hibernate:hibernate-core:6.1.7.Final")
-    api("org.apache.commons:commons-lang3:3.11")
-    implementation("org.springframework.data:spring-data-jpa:3.0.6")
-    implementation("org.slf4j:slf4j-ext:1.7.30")
+    implementation("org.hibernate:hibernate-core:6.2.9.Final")
+    api("org.apache.commons:commons-lang3:3.13.0")
+    implementation("org.springframework.data:spring-data-jpa:3.1.4")
+    implementation("org.slf4j:slf4j-ext:1.7.36")
 }
 
 java {
@@ -85,6 +85,6 @@ publishing {
     }
 }
 
-signing {
-    sign(publishing.publications.getByName("mavenJava"))
-}
+//signing {
+//    sign(publishing.publications.getByName("mavenJava"))
+//}
