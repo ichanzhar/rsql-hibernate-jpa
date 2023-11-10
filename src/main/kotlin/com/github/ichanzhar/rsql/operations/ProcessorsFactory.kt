@@ -1,13 +1,17 @@
 package com.github.ichanzhar.rsql.operations
 
-import com.github.ichanzhar.rsql.utils.OperationRegistryFactory
+import com.github.ichanzhar.rsql.utils.RsqlOperationsRegistry
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
 
 object ProcessorsFactory {
-	@Deprecated("We move this realization to other class",
-		ReplaceWith("OperationRegistryFactory.getProcessor()","com.github.ichanzhar.rsql.utils.OperationRegistryFactory"))
+
+	/**
+	 * Processor for your visitor or Specification
+	 * @see com.github.ichanzhar.rsql.JpaRsqlSpecification
+	 * @see com.github.ichanzhar.rsql.JpaRsqlVisitor
+	 */
 	fun getProcessor(operator: ComparisonOperator, params: Params): Processor {
-		return OperationRegistryFactory.getProcessor(operator, params)
+		return RsqlOperationsRegistry.operationProcessors[operator]!!(params)
 	}
 
 }

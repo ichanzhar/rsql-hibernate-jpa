@@ -14,8 +14,8 @@ typealias ProcessorParamsBuilder = (Params) -> Processor
  * @param operations list of available operators.
  * Old: RsqlOperation.values().filter { activeContexts.contains(it.context) }.map { it.operator }.toMutableSet()
  */
-object OperationRegistryFactory {
-    private val operationProcessors: MutableMap<ComparisonOperator, ProcessorParamsBuilder> = mutableMapOf(
+object RsqlOperationsRegistry {
+    val operationProcessors: MutableMap<ComparisonOperator, ProcessorParamsBuilder> = mutableMapOf(
         RsqlOperation.EQUAL.operator to { EqualProcessor(it) },
         RsqlOperation.NOT_EQUAL.operator to { NotEqualProcessor(it) },
         RsqlOperation.GREATER_THAN.operator to { GtProcessor(it) },
@@ -39,25 +39,16 @@ object OperationRegistryFactory {
      * @see com.github.ichanzhar.rsql.GenericRsqlSpecBuilder
      * @sample addDefaultPostgresOperation
      */
-    fun addOperation(operator: ComparisonOperator, processor: ProcessorParamsBuilder) {
+    fun registerOperation(operator: ComparisonOperator, processor: ProcessorParamsBuilder) {
         operationProcessors[operator] = processor
-    }
-
-    /**
-     * Processor for your visitor or Specification
-     * @see com.github.ichanzhar.rsql.JpaRsqlSpecification
-     * @see com.github.ichanzhar.rsql.JpaRsqlVisitor
-     */
-    fun getProcessor(operator: ComparisonOperator, params: Params): Processor {
-        return operationProcessors[operator]!!(params)
     }
 
     /**
      * Add to [operationProcessors] operation from [RsqlOperation] with context [ParserContext.POSTGRESQL]
      */
-    fun addDefaultPostgresOperation() {
-        addOperation(RsqlOperation.JSON_EQ.operator) { JsonEqualProcessor(it) }
-        addOperation(RsqlOperation.JSONB_EQ.operator) { JsonbEqualProcessor(it) }
+    fun initDefaultPostgresOperation() {
+        registerOperation(RsqlOperation.JSON_EQ.operator) { JsonEqualProcessor(it) }
+        registerOperation(RsqlOperation.JSONB_EQ.operator) { JsonbEqualProcessor(it) }
     }
 
 }

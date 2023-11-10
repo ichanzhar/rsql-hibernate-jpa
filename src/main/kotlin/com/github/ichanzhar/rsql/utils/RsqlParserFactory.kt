@@ -2,7 +2,7 @@ package com.github.ichanzhar.rsql.utils
 
 import com.github.ichanzhar.rsql.ParserContext
 import com.github.ichanzhar.rsql.RsqlOperation
-import com.github.ichanzhar.rsql.utils.OperationRegistryFactory.operations
+import com.github.ichanzhar.rsql.utils.RsqlOperationsRegistry.operations
 import cz.jirutka.rsql.parser.RSQLParser
 
 object RsqlParserFactory {
@@ -14,7 +14,7 @@ object RsqlParserFactory {
      */
     fun instance(context: ParserContext? = null): RSQLParser {
         if (context == ParserContext.POSTGRESQL) {
-            OperationRegistryFactory.addDefaultPostgresOperation()
+            RsqlOperationsRegistry.initDefaultPostgresOperation()
         }
         return RSQLParser(operations)
     }
