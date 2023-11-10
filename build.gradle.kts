@@ -85,6 +85,6 @@ publishing {
     }
 }
 
-//signing {
-//    sign(publishing.publications.getByName("mavenJava"))
-//}
+signing {
+    sign(publishing.publications.getByName("mavenJava"))
+}
