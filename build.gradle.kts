@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.github.ichanzhar"
-version = "0.14-SNAPSHOT"
+version = "0.20"
 
 repositories {
     mavenCentral()
@@ -62,6 +62,13 @@ publishing {
                         organizationUrl.set("https://github.com/ichanzhar")
                     }
                 }
+                contributors {
+                    contributor {
+                        name.set("Oleksandr Hubenko")
+                        email.set("oleksandr.hubenko47@gmail.com")
+                        url.set("https://github.com/ohubenko")
+                    }
+                }
                 scm {
                     connection.set("scm:git:git://github.com/ichanzhar/rsql-hibernate-jpa.git")
                     developerConnection.set("scm:git:git@github.com:ichanzhar/rsql-hibernate-jpa.git")
@@ -74,10 +81,10 @@ publishing {
                     val snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
                     url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotRepositoryUrl else repositoryUrl)
                     credentials {
-                        val nexusUsername: String? by project
-                        val nexusPassword: String? by project
-                        username = nexusUsername
-                        password = nexusPassword
+                        val ossUsername: String? by project
+                        val ossPassword: String? by project
+                        username = ossUsername
+                        password = ossPassword
                     }
                 }
             }
