@@ -7,18 +7,22 @@ plugins {
 }
 
 group = "com.github.ichanzhar"
-version = "0.20"
+version = "0.21"
 
 repositories {
     mavenCentral()
 }
 
+val hibernate = "6.4.4.Final"
+val dataJpa = "3.2.3"
+val slf4jV = "2.0.2"
+
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
-    implementation("org.hibernate:hibernate-core:6.2.9.Final")
+    implementation("org.hibernate:hibernate-core:$hibernate")
     api("org.apache.commons:commons-lang3:3.13.0")
-    implementation("org.springframework.data:spring-data-jpa:3.1.4")
-    implementation("org.slf4j:slf4j-ext:1.7.36")
+    implementation("org.springframework.data:spring-data-jpa:$dataJpa")
+    implementation("org.slf4j:slf4j-ext:$slf4jV")
 }
 
 java {
