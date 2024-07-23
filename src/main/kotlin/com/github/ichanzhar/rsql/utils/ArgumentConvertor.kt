@@ -52,7 +52,7 @@ object ArgumentConvertor {
 			return Date.from(LocalDateTime.parse(arg).atZone(ZoneId.systemDefault()).toInstant())
 		} catch (e: Exception) { }
 		try {
-			return Date.from(LocalDateTime.parse(arg, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")).atZone(ZoneId.systemDefault()).toInstant())
+			return  Date.from(ZonedDateTime.parse(arg).toInstant())
 		} catch (e: Exception) {
 			throw InvalidDateFormatException(arg, property)
 		}
