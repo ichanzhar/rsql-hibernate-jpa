@@ -20,7 +20,7 @@ val slf4jV = "2.0.2"
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
     implementation("org.hibernate:hibernate-core:$hibernate")
-    api("org.apache.commons:commons-lang3:3.13.0")
+    api("org.apache.commons:commons-lang3:3.18.0")
     implementation("org.springframework.data:spring-data-jpa:$dataJpa")
     implementation("org.slf4j:slf4j-ext:$slf4jV")
 }
