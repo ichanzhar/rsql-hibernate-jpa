@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "2.2.10"
     `maven-publish`
     signing
 }
@@ -13,14 +13,14 @@ repositories {
     mavenCentral()
 }
 
-val hibernate = "6.4.4.Final"
-val dataJpa = "3.2.3"
-val slf4jV = "2.0.2"
+val hibernate = "7.1.0.Final"
+val dataJpa = "3.5.3"
+val slf4jV = "2.0.17"
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
     implementation("org.hibernate:hibernate-core:$hibernate")
-    api("org.apache.commons:commons-lang3:3.13.0")
+    api("org.apache.commons:commons-lang3:3.18.0")
     implementation("org.springframework.data:spring-data-jpa:$dataJpa")
     implementation("org.slf4j:slf4j-ext:$slf4jV")
 }
