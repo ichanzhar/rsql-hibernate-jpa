@@ -5,10 +5,15 @@ import com.github.ichanzhar.rsql.operations.ProcessorsFactory.getProcessor
 import com.github.ichanzhar.rsql.utils.ArgumentConvertor
 import com.github.ichanzhar.rsql.utils.JavaTypeUtil
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
-import jakarta.persistence.criteria.*
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.CriteriaQuery
+import jakarta.persistence.criteria.Join
+import jakarta.persistence.criteria.JoinType
+import jakarta.persistence.criteria.Path
+import jakarta.persistence.criteria.Predicate
+import jakarta.persistence.criteria.Root
 import jakarta.persistence.metamodel.Attribute
-import org.apache.commons.lang3.StringUtils
-import org.hibernate.query.criteria.JpaRoot
+import org.apache.commons.lang3.Strings
 import org.springframework.data.jpa.domain.Specification
 import java.util.*
 
@@ -20,17 +25,17 @@ class JpaRsqlSpecification<T>(
 	private val distinct: Boolean,
 ) : Specification<T> {
 
-	override fun toPredicate(root: Root<T>, query: CriteriaQuery<*>, builder: CriteriaBuilder): Predicate {
-		if(distinct) query.distinct(true)
+    override fun toPredicate(root: Root<T>, query: CriteriaQuery<*>?, criteriaBuilder: CriteriaBuilder): Predicate? {
+		if(distinct) query?.distinct(true)
 		if (containsJoins(globalProperty)) {
 			val tokenizer = StringTokenizer(globalProperty, ".")
 			val token = tokenizer.nextToken()
 			if (isAssociation(root, token)) {
 				val path = getPath(root, tokenizer, token)
-				return toPredicate(path, builder, tokenizer.nextToken())
+				return toPredicate(path, criteriaBuilder, tokenizer.nextToken())
 			}
 		}
-		return toPredicate(root, builder, globalProperty)
+		return toPredicate(root, criteriaBuilder, globalProperty)
 	}
 
 	private fun toPredicate(root: Path<T>, builder: CriteriaBuilder?, property: String?): Predicate {
@@ -45,7 +50,7 @@ class JpaRsqlSpecification<T>(
 	}
 
 	private fun containsJoins(property: String): Boolean {
-		return StringUtils.contains(property, ".")
+		return Strings.CS.contains(property, ".")
 	}
 
 	private fun getPath(root: Root<T>, tokenizer: StringTokenizer, token: String): Path<T> {
@@ -63,19 +68,5 @@ class JpaRsqlSpecification<T>(
 		val propertyJavaType = JavaTypeUtil.getPropertyJavaType(argumentJavaType)
 		return arguments.map { ArgumentConvertor.castArgument(it, property, propertyJavaType) }.toList()
 	}
-
-//	private fun getArgumentJavaType(root: Path<T>, property: String?): Class<out Any>? {
-//		var jt = root.get<Any>(property).javaType
-//		try {
-//			val field = (root as JpaRoot).model.javaType.declaredFields.first { it.name == property }
-//			if(Collection::class.java.isAssignableFrom(field.type)) {
-//				val genericType = field.genericType as java.lang.reflect.ParameterizedType
-//				jt  = Class.forName(genericType.actualTypeArguments[0].typeName)
-//			}
-//		} catch (e: Throwable) {
-//			//todo handle more cases
-//		}
-//		return jt
-//	}
 
 }
