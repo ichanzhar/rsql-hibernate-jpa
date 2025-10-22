@@ -15,7 +15,7 @@ repositories {
 }
 
 val hibernate = "7.1.0.Final"
-val dataJpa = "3.5.3"
+val dataJpa = "3.5.5"
 val slf4jV = "2.0.17"
 
 dependencies {
