@@ -14,16 +14,28 @@ repositories {
     mavenCentral()
 }
 
-val hibernate = "7.1.0.Final"
-val dataJpa = "3.5.3"
+val hibernate = "7.2.1.Final"
+val dataJpa = "4.0.2"
 val slf4jV = "2.0.17"
+val junitVersion = "5.11.4"
+val mockitoVersion = "5.15.2"
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
     implementation("org.hibernate:hibernate-core:$hibernate")
-    api("org.apache.commons:commons-lang3:3.18.0")
+    api("org.apache.commons:commons-lang3:3.20.0")
     implementation("org.springframework.data:spring-data-jpa:$dataJpa")
     implementation("org.slf4j:slf4j-ext:$slf4jV")
+
+    // Test dependencies
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+    testImplementation("com.h2database:h2:2.3.232")
+    testImplementation("org.springframework:spring-test:7.0.3")
+    testImplementation("org.slf4j:slf4j-simple:$slf4jV")
 }
 
 java {
@@ -37,6 +49,10 @@ tasks.withType<KotlinCompile>() {
         jvmTarget.set(JvmTarget.JVM_17)
         freeCompilerArgs.set(listOf("-Xjsr305=strict"))
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
