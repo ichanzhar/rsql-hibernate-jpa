@@ -6,7 +6,7 @@ import cz.jirutka.rsql.parser.ast.OrNode
 import cz.jirutka.rsql.parser.ast.RSQLVisitor
 import org.springframework.data.jpa.domain.Specification
 
-class JpaRsqlVisitor<E>(distinct: Boolean = false) : RSQLVisitor<Specification<E>, Void?> {
+class JpaRsqlVisitor<E : Any>(distinct: Boolean = false) : RSQLVisitor<Specification<E>, Void?> {
 	private val builder: GenericRsqlSpecBuilder<E> = GenericRsqlSpecBuilder(distinct)
 
 	override fun visit(node: AndNode, param: Void?): Specification<E> {
