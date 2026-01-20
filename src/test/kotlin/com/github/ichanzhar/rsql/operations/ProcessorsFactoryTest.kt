@@ -5,7 +5,6 @@ import com.github.ichanzhar.rsql.utils.RsqlOperationsRegistry
 import io.mockk.every
 import io.mockk.mockk
 import jakarta.persistence.criteria.CriteriaBuilder
-import jakarta.persistence.criteria.Expression
 import jakarta.persistence.criteria.Path
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -15,15 +14,15 @@ class ProcessorsFactoryTest {
 
     private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
-    private lateinit var mockExpression: Expression<Any>
+    private lateinit var mockNestedPath: Path<Any>
 
     @BeforeEach
     fun setUp() {
         mockPath = mockk(relaxed = true)
         mockBuilder = mockk(relaxed = true)
-        mockExpression = mockk(relaxed = true)
+        mockNestedPath = mockk(relaxed = true)
 
-        every { mockPath.get<Any>(any<String>()) } returns mockExpression
+        every { mockPath.get<Any>(any<String>()) } returns mockNestedPath
     }
 
     @Test

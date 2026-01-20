@@ -16,18 +16,18 @@ class SpecialProcessorsTest {
     private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
     private lateinit var mockPredicate: Predicate
-    private lateinit var mockExpression: Expression<String>
-    private lateinit var mockCollectionExpression: Expression<Collection<*>>
+    private lateinit var mockNestedPath: Path<String>
+    private lateinit var mockCollectionPath: Path<Collection<*>>
 
     @BeforeEach
     fun setUp() {
         mockPath = mockk(relaxed = true)
         mockBuilder = mockk(relaxed = true)
         mockPredicate = mockk(relaxed = true)
-        mockExpression = mockk(relaxed = true)
-        mockCollectionExpression = mockk(relaxed = true)
+        mockNestedPath = mockk(relaxed = true)
+        mockCollectionPath = mockk(relaxed = true)
 
-        every { mockPath.get<String>(any<String>()) } returns mockExpression
+        every { mockPath.get<String>(any<String>()) } returns mockNestedPath
     }
 
     // IsNullProcessor Tests
@@ -72,7 +72,7 @@ class SpecialProcessorsTest {
     @Test
     fun `IsEmptyProcessor should create isEmpty predicate when argument is true`() {
         every { mockBuilder.isEmpty(any<Expression<Collection<*>>>()) } returns mockPredicate
-        every { mockPath.get<Collection<*>>(any<String>()) } returns mockCollectionExpression
+        every { mockPath.get<Collection<*>>(any<String>()) } returns mockCollectionPath
 
         val params = Params(mockPath, mockBuilder, "tags", "tags", listOf("true"), "true")
         val processor = IsEmptyProcessor(params)
@@ -85,7 +85,7 @@ class SpecialProcessorsTest {
     @Test
     fun `IsEmptyProcessor should create isNotEmpty predicate when argument is false`() {
         every { mockBuilder.isNotEmpty(any<Expression<Collection<*>>>()) } returns mockPredicate
-        every { mockPath.get<Collection<*>>(any<String>()) } returns mockCollectionExpression
+        every { mockPath.get<Collection<*>>(any<String>()) } returns mockCollectionPath
 
         val params = Params(mockPath, mockBuilder, "tags", "tags", listOf("false"), "false")
         val processor = IsEmptyProcessor(params)
@@ -98,7 +98,7 @@ class SpecialProcessorsTest {
     // EqualCiProcessor Tests (case-insensitive equality)
     @Test
     fun `EqualCiProcessor should create equal predicate with lower case conversion`() {
-        every { mockBuilder.lower(any<Expression<String>>()) } returns mockExpression
+        every { mockBuilder.lower(any<Expression<String>>()) } returns mockNestedPath
         every { mockBuilder.equal(any<Expression<*>>(), any()) } returns mockPredicate
 
         val params = Params(mockPath, mockBuilder, "name", "name", listOf("JOHN"), "JOHN")
@@ -112,7 +112,7 @@ class SpecialProcessorsTest {
 
     @Test
     fun `EqualCiProcessor should handle mixed case input`() {
-        every { mockBuilder.lower(any<Expression<String>>()) } returns mockExpression
+        every { mockBuilder.lower(any<Expression<String>>()) } returns mockNestedPath
         every { mockBuilder.equal(any<Expression<*>>(), any()) } returns mockPredicate
 
         val params = Params(mockPath, mockBuilder, "name", "name", listOf("JoHn DoE"), "JoHn DoE")
@@ -126,7 +126,7 @@ class SpecialProcessorsTest {
 
     @Test
     fun `EqualCiProcessor should handle already lowercase input`() {
-        every { mockBuilder.lower(any<Expression<String>>()) } returns mockExpression
+        every { mockBuilder.lower(any<Expression<String>>()) } returns mockNestedPath
         every { mockBuilder.equal(any<Expression<*>>(), any()) } returns mockPredicate
 
         val params = Params(mockPath, mockBuilder, "name", "name", listOf("john"), "john")

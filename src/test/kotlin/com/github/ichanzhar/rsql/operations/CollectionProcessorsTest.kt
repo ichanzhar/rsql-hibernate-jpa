@@ -4,7 +4,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import jakarta.persistence.criteria.CriteriaBuilder
-import jakarta.persistence.criteria.Expression
 import jakarta.persistence.criteria.Path
 import jakarta.persistence.criteria.Predicate
 import org.junit.jupiter.api.Assertions.*
@@ -16,7 +15,7 @@ class CollectionProcessorsTest {
     private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
     private lateinit var mockPredicate: Predicate
-    private lateinit var mockExpression: Expression<Any>
+    private lateinit var mockNestedPath: Path<Any>
     private lateinit var mockInPredicate: CriteriaBuilder.In<Any>
 
     @BeforeEach
@@ -24,11 +23,11 @@ class CollectionProcessorsTest {
         mockPath = mockk(relaxed = true)
         mockBuilder = mockk(relaxed = true)
         mockPredicate = mockk(relaxed = true)
-        mockExpression = mockk(relaxed = true)
+        mockNestedPath = mockk(relaxed = true)
         mockInPredicate = mockk(relaxed = true)
 
-        every { mockPath.get<Any>(any<String>()) } returns mockExpression
-        every { mockExpression.`in`(any<Collection<*>>()) } returns mockInPredicate
+        every { mockPath.get<Any>(any<String>()) } returns mockNestedPath
+        every { mockNestedPath.`in`(any<Collection<*>>()) } returns mockInPredicate
     }
 
     // InProcessor Tests
@@ -40,7 +39,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify { mockExpression.`in`(args) }
+        verify { mockNestedPath.`in`(args) }
     }
 
     @Test
@@ -51,7 +50,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify { mockExpression.`in`(args) }
+        verify { mockNestedPath.`in`(args) }
     }
 
     @Test
@@ -62,7 +61,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify { mockExpression.`in`(args) }
+        verify { mockNestedPath.`in`(args) }
     }
 
     // NotInProcessor Tests
@@ -76,7 +75,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify { mockExpression.`in`(args) }
+        verify { mockNestedPath.`in`(args) }
         verify { mockInPredicate.not() }
     }
 
@@ -90,7 +89,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify { mockExpression.`in`(args) }
+        verify { mockNestedPath.`in`(args) }
         verify { mockInPredicate.not() }
     }
 }

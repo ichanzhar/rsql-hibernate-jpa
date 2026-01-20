@@ -16,16 +16,16 @@ class ComparisonProcessorsTest {
     private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
     private lateinit var mockPredicate: Predicate
-    private lateinit var mockExpression: Expression<Comparable<Any>>
+    private lateinit var mockNestedPath: Path<Comparable<Any>>
 
     @BeforeEach
     fun setUp() {
         mockPath = mockk(relaxed = true)
         mockBuilder = mockk(relaxed = true)
         mockPredicate = mockk(relaxed = true)
-        mockExpression = mockk(relaxed = true)
+        mockNestedPath = mockk(relaxed = true)
 
-        every { mockPath.get<Comparable<Any>>(any<String>()) } returns mockExpression
+        every { mockPath.get<Comparable<Any>>(any<String>()) } returns mockNestedPath
     }
 
     // GtProcessor Tests

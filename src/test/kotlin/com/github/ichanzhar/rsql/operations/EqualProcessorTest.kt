@@ -16,16 +16,16 @@ class EqualProcessorTest {
     private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
     private lateinit var mockPredicate: Predicate
-    private lateinit var mockExpression: Expression<String>
+    private lateinit var mockNestedPath: Path<String>
 
     @BeforeEach
     fun setUp() {
         mockPath = mockk(relaxed = true)
         mockBuilder = mockk(relaxed = true)
         mockPredicate = mockk(relaxed = true)
-        mockExpression = mockk(relaxed = true)
+        mockNestedPath = mockk(relaxed = true)
 
-        every { mockPath.get<String>(any<String>()) } returns mockExpression
+        every { mockPath.get<String>(any<String>()) } returns mockNestedPath
     }
 
     @Test
@@ -80,7 +80,7 @@ class EqualProcessorTest {
     fun `should create isNull predicate for null argument`() {
         every { mockBuilder.isNull(any<Expression<*>>()) } returns mockPredicate
 
-        val params = Params(mockPath, mockBuilder, "email", "email", listOf<Any?>(null), null)
+        val params = Params(mockPath, mockBuilder, "email", "email", emptyList(), null)
         val processor = EqualProcessor(params)
         val result = processor.process()
 

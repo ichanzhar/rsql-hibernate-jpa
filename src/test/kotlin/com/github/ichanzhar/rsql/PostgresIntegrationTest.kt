@@ -140,7 +140,7 @@ class PostgresIntegrationTest {
         entityManager.transaction.commit()
     }
 
-    private fun <T> executeRsqlQuery(rsql: String, entityClass: Class<T>): List<T> {
+    private fun <T : Any> executeRsqlQuery(rsql: String, entityClass: Class<T>): List<T> {
         val parser = RsqlParserFactory.instance()
         val rootNode = parser.parse(rsql)
 
