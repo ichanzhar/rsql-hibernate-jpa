@@ -1,15 +1,15 @@
 package com.github.ichanzhar.rsql.operations
 
+import io.mockk.mockk
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.Path
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 
 class ParamsTest {
 
-    private val mockPath: Path<*> = mock(Path::class.java) as Path<*>
-    private val mockBuilder: CriteriaBuilder = mock(CriteriaBuilder::class.java)
+    private val mockPath: Path<Any> = mockk(relaxed = true)
+    private val mockBuilder: CriteriaBuilder = mockk(relaxed = true)
 
     @Test
     fun `should create Params with all properties`() {

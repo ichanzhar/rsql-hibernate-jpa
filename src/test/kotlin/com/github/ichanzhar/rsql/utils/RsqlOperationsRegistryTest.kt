@@ -1,16 +1,13 @@
 package com.github.ichanzhar.rsql.utils
 
 import com.github.ichanzhar.rsql.RsqlOperation
-import com.github.ichanzhar.rsql.operations.Params
 import com.github.ichanzhar.rsql.operations.Processor
 import cz.jirutka.rsql.parser.ast.ComparisonOperator
-import jakarta.persistence.criteria.CriteriaBuilder
-import jakarta.persistence.criteria.Path
+import io.mockk.mockk
 import jakarta.persistence.criteria.Predicate
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
 
 class RsqlOperationsRegistryTest {
 
@@ -78,11 +75,10 @@ class RsqlOperationsRegistryTest {
     @Test
     fun `should register custom operation`() {
         val customOperator = ComparisonOperator("=customOp=")
-        val customProcessor: ProcessorParamsBuilder = { params ->
+        val mockPredicate: Predicate = mockk(relaxed = true)
+        val customProcessor: ProcessorParamsBuilder = { _ ->
             object : Processor {
-                override fun process(): Predicate {
-                    return mock(Predicate::class.java)
-                }
+                override fun process(): Predicate = mockPredicate
             }
         }
 
@@ -116,11 +112,10 @@ class RsqlOperationsRegistryTest {
 
     @Test
     fun `should be able to override existing operator processor`() {
-        val customProcessor: ProcessorParamsBuilder = { params ->
+        val mockPredicate: Predicate = mockk(relaxed = true)
+        val customProcessor: ProcessorParamsBuilder = { _ ->
             object : Processor {
-                override fun process(): Predicate {
-                    return mock(Predicate::class.java)
-                }
+                override fun process(): Predicate = mockPredicate
             }
         }
 

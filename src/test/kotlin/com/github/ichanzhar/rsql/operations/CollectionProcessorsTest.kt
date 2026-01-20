@@ -1,16 +1,19 @@
 package com.github.ichanzhar.rsql.operations
 
-import jakarta.persistence.criteria.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.Expression
+import jakarta.persistence.criteria.Path
+import jakarta.persistence.criteria.Predicate
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
-import org.mockito.kotlin.any
-import org.mockito.kotlin.whenever
 
 class CollectionProcessorsTest {
 
-    private lateinit var mockPath: Path<*>
+    private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
     private lateinit var mockPredicate: Predicate
     private lateinit var mockExpression: Expression<Any>
@@ -18,14 +21,14 @@ class CollectionProcessorsTest {
 
     @BeforeEach
     fun setUp() {
-        mockPath = mock(Path::class.java) as Path<*>
-        mockBuilder = mock(CriteriaBuilder::class.java)
-        mockPredicate = mock(Predicate::class.java)
-        mockExpression = mock(Expression::class.java) as Expression<Any>
-        mockInPredicate = mock(CriteriaBuilder.In::class.java) as CriteriaBuilder.In<Any>
+        mockPath = mockk(relaxed = true)
+        mockBuilder = mockk(relaxed = true)
+        mockPredicate = mockk(relaxed = true)
+        mockExpression = mockk(relaxed = true)
+        mockInPredicate = mockk(relaxed = true)
 
-        whenever(mockPath.get<Any>(any<String>())).thenReturn(mockExpression)
-        whenever(mockExpression.`in`(any<Collection<*>>())).thenReturn(mockInPredicate)
+        every { mockPath.get<Any>(any<String>()) } returns mockExpression
+        every { mockExpression.`in`(any<Collection<*>>()) } returns mockInPredicate
     }
 
     // InProcessor Tests
@@ -37,7 +40,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify(mockExpression).`in`(args)
+        verify { mockExpression.`in`(args) }
     }
 
     @Test
@@ -48,7 +51,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify(mockExpression).`in`(args)
+        verify { mockExpression.`in`(args) }
     }
 
     @Test
@@ -59,13 +62,13 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify(mockExpression).`in`(args)
+        verify { mockExpression.`in`(args) }
     }
 
     // NotInProcessor Tests
     @Test
     fun `NotInProcessor should create not in predicate`() {
-        whenever(mockInPredicate.not()).thenReturn(mockPredicate)
+        every { mockInPredicate.not() } returns mockPredicate
 
         val args = listOf("INACTIVE")
         val params = Params(mockPath, mockBuilder, "status", "status", args, "INACTIVE")
@@ -73,13 +76,13 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify(mockExpression).`in`(args)
-        verify(mockInPredicate).not()
+        verify { mockExpression.`in`(args) }
+        verify { mockInPredicate.not() }
     }
 
     @Test
     fun `NotInProcessor should handle multiple excluded values`() {
-        whenever(mockInPredicate.not()).thenReturn(mockPredicate)
+        every { mockInPredicate.not() } returns mockPredicate
 
         val args = listOf("INACTIVE", "DELETED", "BANNED")
         val params = Params(mockPath, mockBuilder, "status", "status", args, "INACTIVE")
@@ -87,7 +90,7 @@ class CollectionProcessorsTest {
         val result = processor.process()
 
         assertNotNull(result)
-        verify(mockExpression).`in`(args)
-        verify(mockInPredicate).not()
+        verify { mockExpression.`in`(args) }
+        verify { mockInPredicate.not() }
     }
 }

@@ -18,7 +18,8 @@ val hibernate = "7.2.1.Final"
 val dataJpa = "4.0.2"
 val slf4jV = "2.0.17"
 val junitVersion = "5.11.4"
-val mockitoVersion = "5.15.2"
+val mockkVersion = "1.13.16"
+val testcontainersVersion = "1.20.4"
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
@@ -31,9 +32,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    testImplementation("org.mockito:mockito-core:$mockitoVersion")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-    testImplementation("com.h2database:h2:2.3.232")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
+    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+    testImplementation("org.testcontainers:postgresql:$testcontainersVersion")
+    testImplementation("org.postgresql:postgresql:42.7.4")
     testImplementation("org.springframework:spring-test:7.0.3")
     testImplementation("org.slf4j:slf4j-simple:$slf4jV")
 }

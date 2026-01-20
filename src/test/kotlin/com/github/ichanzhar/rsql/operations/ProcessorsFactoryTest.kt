@@ -2,32 +2,28 @@ package com.github.ichanzhar.rsql.operations
 
 import com.github.ichanzhar.rsql.RsqlOperation
 import com.github.ichanzhar.rsql.utils.RsqlOperationsRegistry
+import io.mockk.every
+import io.mockk.mockk
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.Expression
 import jakarta.persistence.criteria.Path
-import jakarta.persistence.criteria.Predicate
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.*
-import org.mockito.kotlin.any
-import org.mockito.kotlin.whenever
 
 class ProcessorsFactoryTest {
 
-    private lateinit var mockPath: Path<*>
+    private lateinit var mockPath: Path<Any>
     private lateinit var mockBuilder: CriteriaBuilder
-    private lateinit var mockPredicate: Predicate
     private lateinit var mockExpression: Expression<Any>
 
     @BeforeEach
     fun setUp() {
-        mockPath = mock(Path::class.java) as Path<*>
-        mockBuilder = mock(CriteriaBuilder::class.java)
-        mockPredicate = mock(Predicate::class.java)
-        mockExpression = mock(Expression::class.java) as Expression<Any>
+        mockPath = mockk(relaxed = true)
+        mockBuilder = mockk(relaxed = true)
+        mockExpression = mockk(relaxed = true)
 
-        whenever(mockPath.get<Any>(any<String>())).thenReturn(mockExpression)
+        every { mockPath.get<Any>(any<String>()) } returns mockExpression
     }
 
     @Test
