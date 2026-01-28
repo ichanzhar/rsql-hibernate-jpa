@@ -14,7 +14,7 @@ repositories {
     mavenCentral()
 }
 
-val hibernate = "7.1.0.Final"
+val hibernate = "7.2.2.Final"
 val dataJpa = "3.5.3"
 val slf4jV = "2.0.17"
 
