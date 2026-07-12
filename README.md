@@ -3,7 +3,15 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fichanzhar%2Frsql-hibernate-jpa.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fichanzhar%2Frsql-hibernate-jpa?ref=badge_shield)
 
 
-* RSQL implementation for Hibernate/Spring data with join tables support (JDK 21, Spring Framework 7 / Spring Boot 4.x; use version 0.21 for Spring Boot 3.x)
+* RSQL implementation for Hibernate/Spring data with join tables support (JDK 21, Spring Boot 4.x)
+
+## Library versions
+
+| Library version | Spring Boot |
+|---|---|
+| 0.1x | 2.x |
+| 0.2x | 3.x |
+| 4.x | 4.x |
 
 ## Repository layout
 
@@ -15,7 +23,7 @@ This repository is a monorepo:
   is a Spring Boot 3.5 + Postgres demo depending on the released `0.21` artifact;
   [`examples/spring-boot4-postgres-example`](examples/spring-boot4-postgres-example) is the same
   demo on Spring Boot 4.1, consuming the library source via a Gradle composite build until
-  `7.0.8` is published to Maven Central. Both cover core RSQL operators, join-path filtering,
+  `4.0.0` is published to Maven Central. Both cover core RSQL operators, join-path filtering,
   and the Postgres-only `=jsonbeq=` operator.
 
 ## Dependencies:

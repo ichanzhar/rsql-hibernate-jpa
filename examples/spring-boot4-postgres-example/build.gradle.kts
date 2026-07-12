@@ -25,7 +25,7 @@ dependencies {
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    implementation("com.github.ichanzhar:rsql-hibernate-jpa:7.0.8")
+    implementation("com.github.ichanzhar:rsql-hibernate-jpa:4.0.0")
 
     runtimeOnly("org.postgresql:postgresql")
 

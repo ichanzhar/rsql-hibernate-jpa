@@ -14,9 +14,9 @@ from the root `settings.gradle.kts`). `examples/` holds example projects demonst
 each is a fully independent Gradle build (own wrapper, own `settings.gradle.kts`). Examples are
 NOT included in the root build and are NOT part of root CI; build/test them from their own
 directory. `spring-boot-postgres-example/` (Spring Boot 3.5) depends on the released `0.21`
-Maven Central artifact; `spring-boot4-postgres-example/` (Spring Boot 4.1) declares the `7.0.8`
+Maven Central artifact; `spring-boot4-postgres-example/` (Spring Boot 4.1) declares the `4.0.0`
 coordinate but substitutes it with the local library source via `includeBuild("../..")` in its
-`settings.gradle.kts` — delete that block once `7.0.8` is published.
+`settings.gradle.kts` — delete that block once `4.0.0` is published.
 
 The library module (`rsql-hibernate-jpa/`) has no test source set. Both examples have their own
 Testcontainers-based integration tests (Docker required).

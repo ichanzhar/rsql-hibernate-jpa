@@ -8,9 +8,9 @@ and the library's Postgres-only `=jsonbeq=` JSON operator.
 
 This is a **standalone Gradle project** with its own wrapper and `settings.gradle.kts` — it is
 not part of the parent repo's root build or CI. It declares the library by its normal Maven
-coordinate (`com.github.ichanzhar:rsql-hibernate-jpa:7.0.8`), but until 7.0.8 is published to
+coordinate (`com.github.ichanzhar:rsql-hibernate-jpa:4.0.0`), but until 4.0.0 is published to
 Maven Central, `settings.gradle.kts` substitutes that coordinate with the library source in this
-repository via a Gradle composite build (`includeBuild("../..")`). Once 7.0.8 is released,
+repository via a Gradle composite build (`includeBuild("../..")`). Once 4.0.0 is released,
 delete the `includeBuild` block and the example becomes a pure Maven Central consumer that can
 be copied out of this repository and run on its own.
 

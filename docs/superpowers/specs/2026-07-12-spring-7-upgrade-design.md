@@ -11,14 +11,13 @@ new version is published to Maven Central.
 
 ## Versioning decision
 
-The library's published version becomes **7.0.8**, tracking the Spring Framework version it is
-built against. Future releases follow the same scheme.
+The library's published version becomes **4.0.0**, tracking the Spring Boot major version it targets (0.1x = Spring Boot 2, 0.2x = Spring Boot 3, 4.x = Spring Boot 4). Future releases follow the same scheme. (Amended 2026-07-12: originally 7.0.8 tracking Spring Framework.)
 
 ## Version matrix
 
 | Component | Current | Target | Rationale |
 |---|---|---|---|
-| Library version | 0.21 | 7.0.8 | Tracks Spring Framework version |
+| Library version | 0.21 | 4.0.0 | Tracks Spring Boot major version |
 | Kotlin (library + new example) | 2.2.10 | 2.3.20 | Requested |
 | Gradle wrapper (root) | 8.14.2 | 9.6.1 | Requested; existing example already ships 9.6.1 |
 | Java baseline | 17 | 21 | Requested minimum |
@@ -35,7 +34,7 @@ Boot manages, and the library build stays auditable.
 
 Build changes in `rsql-hibernate-jpa/build.gradle.kts`:
 
-- `version = "7.0.8"`
+- `version = "4.0.0"`
 - `kotlin("jvm") version "2.3.20"`
 - `val hibernate = "7.4.1.Final"`, `val dataJpa = "4.1.0"`
 - `sourceCompatibility = JavaVersion.VERSION_21`, `jvmTarget.set(JvmTarget.JVM_21)`
@@ -72,14 +71,14 @@ Build file differences from the old example:
 - No `extra["hibernate.version"]` / `extra["jakarta-persistence.version"]` overrides — Boot
   4.1.0 already manages Hibernate 7.4.1.Final, matching the library.
 
-Dependency wiring until 7.0.8 is on Maven Central:
+Dependency wiring until 4.0.0 is on Maven Central:
 
 - Dependency declared with the real coordinate
-  `implementation("com.github.ichanzhar:rsql-hibernate-jpa:7.0.8")`.
+  `implementation("com.github.ichanzhar:rsql-hibernate-jpa:4.0.0")`.
 - `settings.gradle.kts` adds `includeBuild("../..")` with dependency substitution mapping
   `com.github.ichanzhar:rsql-hibernate-jpa` to the `:rsql-hibernate-jpa` subproject, so the
   example builds against local source.
-- After the 7.0.8 release: delete the `includeBuild` block; the example becomes a pure Maven
+- After the 4.0.0 release: delete the `includeBuild` block; the example becomes a pure Maven
   Central consumer like the existing one. The example README documents this switch.
 
 ## Part 3: Unchanged pieces
@@ -92,7 +91,7 @@ Dependency wiring until 7.0.8 is on Maven Central:
 ## Part 4: Documentation updates
 
 - Root `README.md`: requirements (JDK 21, Hibernate 7.4.x, Spring Data JPA 4.1.x), current
-  version 7.0.8, examples list mentioning both example projects.
+  version 4.0.0, examples list mentioning both example projects.
 - `CLAUDE.md`: version requirements and the new example.
 - New example `README.md`: bootRun and test instructions, Docker requirement, note about the
   temporary `includeBuild` wiring.
@@ -113,6 +112,6 @@ No changes to the library's error-handling behavior (`InvalidEnumValueException`
 
 ## Out of scope
 
-- Publishing 7.0.8 to Maven Central (manual `./gradlew publish` with credentials, as today).
+- Publishing 4.0.0 to Maven Central (manual `./gradlew publish` with credentials, as today).
 - Removing the `includeBuild` wiring after release.
 - Any feature work or refactoring in library sources.
