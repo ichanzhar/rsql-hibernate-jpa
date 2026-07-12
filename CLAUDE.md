@@ -37,10 +37,10 @@ the library module.
 Publishing to Sonatype/Maven Central is done via `./gradlew publish`, which requires `ossUsername`/`ossPassword`
 project properties and GPG signing configured — not needed for normal development.
 
-Example app (independent build, requires Docker for tests):
+Example apps (independent builds, require Docker for tests; try either example directory):
 
 ```bash
-cd examples/spring-boot-postgres-example
+cd examples/spring-boot-postgres-example   # or examples/spring-boot4-postgres-example
 ./gradlew test      # spins up Postgres via Testcontainers
 ./gradlew bootRun   # requires a running Postgres instance, see its own README
 ```

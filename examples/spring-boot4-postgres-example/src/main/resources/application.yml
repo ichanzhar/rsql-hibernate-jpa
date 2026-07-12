@@ -1,6 +1,6 @@
 spring:
   application:
-    name: spring-boot-postgres-example
+    name: spring-boot4-postgres-example
   jpa:
     hibernate:
       ddl-auto: update
