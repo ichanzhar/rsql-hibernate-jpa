@@ -34,8 +34,13 @@ Library (run from repo root — root build includes exactly one subproject, `rsq
 CI (`.github/workflows/pr-ci.yaml`) runs `./gradlew build` on JDK 21 for every PR — this builds only
 the library module.
 
-Publishing to Sonatype/Maven Central is done via `./gradlew publish`, which requires `ossUsername`/`ossPassword`
-project properties and GPG signing configured — not needed for normal development.
+Publishing to Maven Central goes through the Central Portal via the nmcp Gradle settings plugin
+(configured in the root `settings.gradle.kts`): `./gradlew publishAggregationToCentralPortal`, which requires
+`CENTRAL_USERNAME`/`CENTRAL_PASSWORD` (Central Portal token) and `SIGNING_KEY`/`SIGNING_PASSWORD` (armored GPG
+key) environment variables — not needed for normal development. Releases are normally done via the manually
+triggered `Release` GitHub Actions workflow (`.github/workflows/release.yaml`), which reads the version from
+`rsql-hibernate-jpa/build.gradle.kts`, publishes to Maven Central, and creates tag `v<version>` plus a GitHub
+Release with generated notes and the built jars.
 
 Example apps (independent builds, require Docker for tests; try either example directory):
 
