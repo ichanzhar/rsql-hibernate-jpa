@@ -2,25 +2,25 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.2.10"
+    kotlin("jvm") version "2.3.20"
     `maven-publish`
     signing
 }
 
 group = "com.github.ichanzhar"
-version = "0.21"
+version = "7.0.8"
 
 repositories {
     mavenCentral()
 }
 
-val hibernate = "7.1.0.Final"
-val dataJpa = "3.5.3"
+val hibernate = "7.4.1.Final"
+val dataJpa = "4.1.0"
 val slf4jV = "2.0.17"
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
-    implementation("org.hibernate:hibernate-core:$hibernate")
+    implementation("org.hibernate.orm:hibernate-core:$hibernate")
     api("org.apache.commons:commons-lang3:3.18.0")
     implementation("org.springframework.data:spring-data-jpa:$dataJpa")
     implementation("org.slf4j:slf4j-ext:$slf4jV")
@@ -28,13 +28,13 @@ dependencies {
 
 java {
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 
 tasks.withType<KotlinCompile>() {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
+        jvmTarget.set(JvmTarget.JVM_21)
         freeCompilerArgs.set(listOf("-Xjsr305=strict"))
     }
 }
