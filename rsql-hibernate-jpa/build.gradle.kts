@@ -81,23 +81,14 @@ publishing {
                     url.set("https://github.com/ichanzhar/rsql-hibernate-jpa")
                 }
             }
-            repositories {
-                maven {
-                    val repositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                    val snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                    url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotRepositoryUrl else repositoryUrl)
-                    credentials {
-                        val ossUsername: String? by project
-                        val ossPassword: String? by project
-                        username = ossUsername
-                        password = ossPassword
-                    }
-                }
-            }
         }
     }
 }
 
 signing {
+    val signingKey = providers.environmentVariable("SIGNING_KEY").orNull
+    if (signingKey != null) {
+        useInMemoryPgpKeys(signingKey, providers.environmentVariable("SIGNING_PASSWORD").orNull)
+    }
     sign(publishing.publications.getByName("mavenJava"))
 }

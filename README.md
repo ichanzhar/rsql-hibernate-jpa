@@ -1,5 +1,5 @@
 # rsql-hibernate-jpa
-[![Sonatype Nexus (Releases)](https://img.shields.io/maven-central/v/com.github.ichanzhar/rsql-hibernate-jpa?label=Release)](https://oss.sonatype.org/#nexus-search;gav~com.github.ichanzhar~rsql-hibernate-jpa)
+[![Sonatype Nexus (Releases)](https://img.shields.io/maven-central/v/com.github.ichanzhar/rsql-hibernate-jpa?label=Release)](https://central.sonatype.com/artifact/com.github.ichanzhar/rsql-hibernate-jpa)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fichanzhar%2Frsql-hibernate-jpa.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fichanzhar%2Frsql-hibernate-jpa?ref=badge_shield)
 
 
