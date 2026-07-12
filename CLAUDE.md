@@ -6,17 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 RSQL implementation for Hibernate/Spring Data JPA that translates RSQL query strings into Spring Data JPA
 `Specification`s, with support for joined/associated tables. Published to Maven Central as
-`com.github.ichanzhar:rsql-hibernate-jpa`. Requires JDK 17, Hibernate 7.x, Spring Data JPA 3.5.x
+`com.github.ichanzhar:rsql-hibernate-jpa`. Requires JDK 21, Hibernate 7.4.x, Spring Data JPA 4.1.x
 (see `rsql-hibernate-jpa/build.gradle.kts` for exact versions).
 
 This repo is a monorepo: the library lives in `rsql-hibernate-jpa/` (the only subproject included
 from the root `settings.gradle.kts`). `examples/` holds example projects demonstrating usage —
-each is a fully independent Gradle build (own wrapper, own `settings.gradle.kts`) that depends on
-the library as an external Maven Central artifact. Examples are NOT included in the root build
-and are NOT part of root CI; build/test them from their own directory.
+each is a fully independent Gradle build (own wrapper, own `settings.gradle.kts`). Examples are
+NOT included in the root build and are NOT part of root CI; build/test them from their own
+directory. `spring-boot-postgres-example/` (Spring Boot 3.5) depends on the released `0.21`
+Maven Central artifact; `spring-boot4-postgres-example/` (Spring Boot 4.1) declares the `4.0.0`
+coordinate but substitutes it with the local library source via `includeBuild("../..")` in its
+`settings.gradle.kts` — delete that block once `4.0.0` is published.
 
-The library module (`rsql-hibernate-jpa/`) has no test source set. The example under
-`examples/spring-boot-postgres-example/` does have its own integration test (Testcontainers-based).
+The library module (`rsql-hibernate-jpa/`) has no test source set. Both examples have their own
+Testcontainers-based integration tests (Docker required).
 
 ## Common commands
 
@@ -34,10 +37,10 @@ the library module.
 Publishing to Sonatype/Maven Central is done via `./gradlew publish`, which requires `ossUsername`/`ossPassword`
 project properties and GPG signing configured — not needed for normal development.
 
-Example app (independent build, requires Docker for tests):
+Example apps (independent builds, require Docker for tests; try either example directory):
 
 ```bash
-cd examples/spring-boot-postgres-example
+cd examples/spring-boot-postgres-example   # or examples/spring-boot4-postgres-example
 ./gradlew test      # spins up Postgres via Testcontainers
 ./gradlew bootRun   # requires a running Postgres instance, see its own README
 ```
