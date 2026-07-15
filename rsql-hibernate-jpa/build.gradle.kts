@@ -16,7 +16,7 @@ repositories {
 
 val hibernate = "7.4.1.Final"
 val dataJpa = "4.1.0"
-val slf4jV = "2.0.17"
+val slf4jV = "2.0.18"
 
 dependencies {
     api("cz.jirutka.rsql:rsql-parser:2.1.0")
